@@ -7,6 +7,15 @@
       "url": "mahasiswa"
     },
     {
+      "name": "Kriteria",
+      "icon": "menu-icon tf-icons bx bx-list-ul",
+      "slug": "kriteria",
+      "url": "kriteria"
+    },
+    {
+      "menuHeader": "Template"
+    },
+    {
       "url": "/",
       "name": "Dashboards",
       "icon": "menu-icon tf-icons bx bx-home-circle",
