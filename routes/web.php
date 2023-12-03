@@ -112,5 +112,11 @@ Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic')
 
 
 
-// new me 
+// Route for Mahasiswa
 Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa');
+
+// Route for Peringkat
+Route::get('/peringkat', function () {
+    return view('content.peringkat.index');
+})
+        ->name('peringkat');
