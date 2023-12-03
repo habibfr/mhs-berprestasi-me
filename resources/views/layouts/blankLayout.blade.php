@@ -1,9 +1,13 @@
 @extends('layouts/commonMaster' )
 
+@extends('_partials.navbar')
+
 @section('layoutContent')
 
-<!-- Content -->
-@yield('content')
-<!--/ Content -->
+<div class="container">
+    <!-- Content -->
+    @yield('content')
+    <!--/ Content -->
+</div>
 
 @endsection
