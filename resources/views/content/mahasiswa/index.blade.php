@@ -1,8 +1,10 @@
-@extends('layouts/contentNavbarLayout')
+@extends('layouts/blankLayout')
 
 @section('title', 'Mahasiswa')
 
 @section('content')
+    <div class="grid"></div>
+    <button class="btn btn-secondary">Import</button>
     <h4 class="py-3 mb-4">
         Mahasiswa
     </h4>
