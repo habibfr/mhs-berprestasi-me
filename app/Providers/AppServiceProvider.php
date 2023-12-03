@@ -20,5 +20,6 @@ class AppServiceProvider extends ServiceProvider
   public function boot(): void
   {
     //
+    // $this->app->bind('path.bulic', fn () => base_path() . '/../public_html)');
   }
 }

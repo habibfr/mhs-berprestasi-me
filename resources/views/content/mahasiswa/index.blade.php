@@ -3,14 +3,40 @@
 @section('title', 'Mahasiswa')
 
 @section('content')
-    <div class="grid"></div>
-    <button class="btn btn-secondary">Import</button>
-    <h4 class="py-3 mb-4">
-        Mahasiswa
-    </h4>
-
-
     <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <div id="floatingInputHelp mb-2" class="form-text">Filter by jurusan dan angkatan</div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-danger dropdown-toggle px-3" data-bs-toggle="dropdown"
+                        aria-expanded="false">S1 Sistem Informasi</button>
+                    <ul class="dropdown-menu" style="">
+                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Sistem Informasi</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">D3 Sistem Informasi</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Teknik Komputer</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Desain Komunikasi Visual</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Manajemen</a></li>
+                    </ul>
+
+                    <input class="form-control mx-2 btn-outline-danger" type="number" min="2015" max="2023"
+                        step="1" value="2021" id="year-filter">
+                </div>
+                <button type="button" class="btn btn-danger ">Filter</button>
+            </div>
+
+        </div>
+        <div class="col">
+            <div class="float-end">
+
+                <div id="floatingInputHelp mb-2" class="form-text">Import excel</div>
+                <button type="button" class="btn btn-danger">Import</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- <button class="btn btn-secondary mb-4">Import</button> --}}
+
+    {{-- <div class="row">
         <div class="col">
             <div class="mb-3">
                 <div id="floatingInputHelp mb-2" class="form-text">Filter by jurusan dan angkatan</div>
@@ -39,7 +65,7 @@
                 <button type="button" class="btn btn-info">Import</button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
 
@@ -124,7 +150,8 @@
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                     data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i>
+                                    <a class="dropdown-item" href="javascript:void(0);"><i
+                                            class="bx bx-edit-alt me-2"></i>
                                         Edit</a>
                                     <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i>
                                         Delete</a>
