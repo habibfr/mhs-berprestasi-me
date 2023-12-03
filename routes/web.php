@@ -120,3 +120,9 @@ Route::get('/peringkat', function () {
     return view('content.peringkat.index');
 })
         ->name('peringkat');
+
+// Route for Kriteria
+Route::get('/kriteria', function () {
+    return view('content.kriteria.index');
+})
+        ->name('kriteria');
