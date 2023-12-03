@@ -1,5 +1,5 @@
 @extends('layouts.commonMaster')
 
 @section('layoutContent')
-    @yield('section')
+    @yield('content')
 @endsection
