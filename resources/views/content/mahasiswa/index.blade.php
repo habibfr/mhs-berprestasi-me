@@ -78,10 +78,10 @@
             </div>
             <div class="col">
                 <div class="float-end">
-                    <div class="navbar-nav align-items-center card-header">
-                        <div class="nav-item d-flex align-items-center">
+                    <div class="align-items-center ">
+                        <div class="mx-3 mt-3 d-flex align-items-center ">
                             <i class="bx bx-search fs-4 lh-0"></i>
-                            <input type="text" class="form-control border-0  shadow-none ps-1 ps-sm-2"
+                            <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2"
                                 placeholder="Search..." aria-label="Search...">
                         </div>
                     </div>
