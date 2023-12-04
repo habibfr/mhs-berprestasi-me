@@ -3,10 +3,23 @@
 @section('title', 'Mahasiswa')
 
 @section('content')
+
+
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible" role="alert">
+            This is a success dismissible alert — check it out!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+        <br>
+    @endif
+
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <div id="floatingInputHelp mb-2" class="form-text">Filter by jurusan dan angkatan</div>
+                <div>
+                    <small id="" class="">Filter by jurusan dan angkatan</small>
+                </div>
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-danger dropdown-toggle px-3" data-bs-toggle="dropdown"
                         aria-expanded="false">S1 Sistem Informasi</button>
@@ -28,8 +41,29 @@
         <div class="col">
             <div class="float-end">
 
-                <div id="floatingInputHelp mb-2" class="form-text">Import excel</div>
-                <button type="button" class="btn btn-danger">Import</button>
+                {{-- <div id="floatingInputHelp mb-2" class="form-text">Import excel</div>
+                <button type="button" class="btn btn-danger">Import</button> --}}
+
+                <form action="{{ route('mahasiswa.import') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <fieldset>
+                        <small class=" mx-2">{{ __('Please upload only Excel (.xlsx or .xls) files') }}</small>
+                        <div class="input-group">
+                            <input type="file" required class="form-control mx-2" name="uploaded_file"
+                                id="uploaded_file">
+                            @if ($errors->has('uploaded_file'))
+                                <p class="text-right mb-0">
+                                    <small class="danger text-muted"
+                                        id="file-error">{{ $errors->first('uploaded_file') }}</small>
+                                </p>
+                            @endif
+                            <div class="input-group-append" id="button-addon2">
+                                <button class="btn btn-danger square" type="submit"><i class="ft-upload mr-1"></i>
+                                    Upload</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
@@ -106,7 +140,31 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    <tr>
+
+                    @forelse ($data as $key => $mahasiswa)
+                        <tr>
+                            <td>{{ ++$key }}</td>
+                            <td>{{ $mahasiswa->nim }}</td>
+                            <td>{{ $mahasiswa->nama }}</td>
+                            <td>{{ $mahasiswa['nilai']->IPK }}</td>
+                            <td>{{ $mahasiswa['nilai']->SSKM }}</td>
+                            <td>{{ $mahasiswa['nilai']->TOEFL }}</td>
+                            <td>
+                                <div class="inline">
+                                    <span class="text-success" data-bs-toggle="modal" data-bs-target="#modalEditMhs"><i
+                                            class="bx bx-edit-alt bx-sm me-2"></i>
+                                    </span>
+                                    <span class="text-danger" data-bs-toggle="modal" data-bs-target="#modalHapusMhs"><i
+                                            class="bx bx-trash bx-sm me-2"></i>
+                                        </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <p>Maaf data masih kosong!</p>
+                    @endforelse
+
+                    {{-- <tr>
                         <td>1</td>
                         <td>21410100099</td>
                         <td>Albert Cooking</td>
@@ -199,7 +257,7 @@
                                     </a>
                             </div>
                         </td>
-                    </tr>
+                    </tr> --}}
 
                     {{-- <tr>
                         <td><i class="bx bxl-bootstrap bx-sm text-primary me-3"></i> <span class="fw-medium">Bootstrap
@@ -249,8 +307,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel1">Edit Mahasiswa</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
