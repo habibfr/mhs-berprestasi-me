@@ -118,6 +118,12 @@ Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa
 // import data for mahasiswa
 Route::post('/mahasiswa/import', [MahasiswaController::class, 'importData'])->name('mahasiswa.import');
 
+// Filter Mahasiswa
+Route::get('/mahasiswa/filter', [MahasiswaController::class, 'filter'])->name('mahasiswa.filter');
+
+// get mahasiswa by id
+Route::get('/mahasiswa/get-mahasiswa/{id}', [MahasiswaController::class, 'getMahasiswaById']);
+
 
 
 // Route for Peringkat

@@ -14,6 +14,7 @@
 
 @section('content')
 
+    {{-- success upload --}}
     @if ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible" role="alert">
             This is a success dismissible alert — check it out!
@@ -23,27 +24,50 @@
         <br>
     @endif
 
+
+    {{-- error filter --}}
+    @if ($errors->has('jurusan'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            This is a danger {{ $errors->first('jurusan') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    @endif
+
+    @if ($errors->has('angkatan'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            This is a danger {{ $errors->first('angkatan') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    @endif
+
+
     <div class="row">
         <div class="col">
             <div class="mb-3">
                 <div>
                     <small id="" class="">Filter by jurusan dan angkatan</small>
                 </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-outline-danger dropdown-toggle px-3" data-bs-toggle="dropdown"
-                        aria-expanded="false">S1 Sistem Informasi</button>
-                    <ul class="dropdown-menu" style="">
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Sistem Informasi</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">D3 Sistem Informasi</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Teknik Komputer</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Desain Komunikasi Visual</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Manajemen</a></li>
-                    </ul>
+                <form action="{{ route('mahasiswa.filter') }}" method="GET">
+                    @csrf
+                    <div class="btn-group">
+                        <select id="defaultSelect" class="form-select btn-outline-secondary" name="jurusan">
+                            <option value="0">Pilih Jurusan</option>
+                            <option value="1">Sistem Infromasi</option>
+                            <option value="2">S1 Desain Komunikasi Visual</option>
+                            <option value="3">S1 Teknik Komputer</option>
+                        </select>
 
-                    <input class="form-control mx-2 btn-outline-danger" type="number" min="2015" max="2023"
-                        step="1" value="2021" id="year-filter">
-                </div>
-                <button type="button" class="btn btn-danger ">Filter</button>
+
+                        <input class="form-control mx-2 btn-outline-secondary" name="angkatan" type="number" min="2015"
+                            max="2023" step="1" id="year-filter">
+
+
+                    </div>
+                    <button type="submit" class="btn btn-secondary ">Filter</button>
+                </form>
+
             </div>
 
         </div>
@@ -67,7 +91,7 @@
                                 </p>
                             @endif
                             <div class="input-group-append" id="button-addon2">
-                                <button class="btn btn-danger square" type="submit"><i class="ft-upload mr-1"></i>
+                                <button class="btn btn-secondary square" type="submit"><i class="ft-upload mr-1"></i>
                                     Upload</button>
                             </div>
                         </div>
@@ -115,7 +139,8 @@
                             <td>{{ $mahasiswa['nilai']->TOEFL }}</td>
                             <td>
                                 <div class="inline">
-                                    <span class="text-success" data-bs-toggle="modal" data-bs-target="#modalEditMhs"><i
+                                    <span data-id="{{ $mahasiswa->id }}" class="text-success btnEdit"
+                                        data-bs-toggle="modal" data-bs-target="#modalEditMhs"><i
                                             class="bx bx-edit-alt bx-sm me-2"></i>
                                     </span>
                                     <span class="text-danger" data-bs-toggle="modal" data-bs-target="#modalHapusMhs"><i
@@ -204,6 +229,35 @@
         <script>
             $(document).ready(function() {
                 $('#tabelMahasiswa').DataTable();
+
+                // Ketika tombol edit diklik
+                $('.btnEdit').click(function() {
+                    // Ambil data-id dari tombol edit mahasiswa
+                    var mahasiswaId = $(this).data('id');
+                    console.log(mahasiswaId);
+
+                    // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
+                    $.ajax({
+                        url: '/mahasiswa/get-mahasiswa/' + mahasiswaId,
+                        method: 'GET',
+                        dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
+                        success: function(data) {
+
+                            console.log(data);
+                            // Update konten modal dengan data yang diterima
+                            $('#nameBasic').val(data
+                                .nama); // Misalnya, sesuaikan dengan properti yang sesuai
+                            $('#emailBasic').val(data.email);
+                            // Tambahkan pengaturan nilai untuk properti lainnya
+
+                            // Tampilkan modal
+                            $('#modalEditMhs').modal('show');
+                        },
+                        error: function() {
+                            console.log('Gagal mengambil data mahasiswa.');
+                        }
+                    });
+                });
             });
         </script>
     @endpush

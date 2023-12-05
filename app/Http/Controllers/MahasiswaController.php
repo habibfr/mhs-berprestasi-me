@@ -16,6 +16,8 @@ class MahasiswaController extends Controller
 
         $data = Mahasiswa::all();
 
+        // dd($data);
+
         
         return view('content.mahasiswa.index', compact('data'));
     }
@@ -71,4 +73,59 @@ class MahasiswaController extends Controller
         }
         return back()->withSuccess('Great! Data has been successfully uploaded.');
     }
+
+
+    public function filter(Request $request){
+
+        if ($request->jurusan == 0 && $request->angkatan == null) {
+
+            $data = Mahasiswa::all();
+
+            return view('content.mahasiswa.index', compact('data'))->with('kosong', "Data jangan kosong");
+
+        }else{
+            $this->validate($request, [
+                'jurusan' => 'nullable|numeric|max:3',
+                'angkatan'=>'nullable|numeric|min:2015|max:2023',
+            ]);
+        }
+
+        
+
+        
+
+        $dataJurusan = array('S1 Sistem Informasi', 'S1 Manajemen', 'S1 Teknik Komputer');
+
+        if($request->jurusan != 0 ){
+            $jurusan = $dataJurusan[($request->jurusan) - 1];
+        }
+
+        $angkatan = substr($request->angkatan, 2, 3);
+        
+
+        if($request->jurusan == 0){
+            $data = Mahasiswa::where('nim', 'like', $angkatan . '%')
+                        ->get();
+            return view('content.mahasiswa.index', compact('data'));
+        }
+
+        if($request->angkatan == null){
+            $data = Mahasiswa::where('jurusan','like', $jurusan)
+                        ->get();
+            return view('content.mahasiswa.index', compact('data'));
+        }
+
+        $data = Mahasiswa::where('jurusan','like', $jurusan)
+                        ->where('nim', 'like', $angkatan . '%')
+                        ->get();
+        return view('content.mahasiswa.index', compact('data'));
+    
+    }
+
+
+    public function getMahasiswaById($id){
+        $data = Mahasiswa::find($id);
+        return response()->json($data);
+    }
+    
 }
