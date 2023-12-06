@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('nilais', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("mahasiswa_id")->nullable()->index("fk_nilai_to_mahasiswa");
             $table->double('IPK')->nullable();
             $table->integer('SSKM')->nullable();
