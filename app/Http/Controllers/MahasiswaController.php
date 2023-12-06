@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa\Nilai;
 use App\Models\Mahasisawa\Mahasiswa;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class MahasiswaController extends Controller
 {
@@ -67,9 +68,17 @@ class MahasiswaController extends Controller
             Mahasiswa::insert($dataMahasiswa);
             Nilai::insert($dataNilai);
             
-        } catch (Exception $e) {
-            $error_code = $e->getMessage();
-            return back()->withErrors('There was a problem uploading the data!' . $error_code);
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '23000') {
+                // Tangani kesalahan unik di sini
+                session()->flash('error', 'Data Mahasiswa sudah digunakan diimport');
+                return redirect()->back();
+            } else {
+                // Tangani kesalahan lainnya
+                session()->flash('error', 'Terjadi kesalahan pada server');
+                return redirect()->back();
+            }
+        
         }
         return back()->withSuccess('Great! Data has been successfully uploaded.');
     }
@@ -94,7 +103,7 @@ class MahasiswaController extends Controller
 
         
 
-        $dataJurusan = array('S1 Sistem Informasi', 'S1 Manajemen', 'S1 Teknik Komputer');
+        $dataJurusan = array('S1 Sistem Informasi', 'S1 Desain Komunikasi Visual', 'S1 Teknik Komputer');
 
         if($request->jurusan != 0 ){
             $jurusan = $dataJurusan[($request->jurusan) - 1];
@@ -124,8 +133,64 @@ class MahasiswaController extends Controller
 
 
     public function getMahasiswaById($id){
-        $data = Mahasiswa::find($id);
-        return response()->json($data);
+        // $data = Mahasiswa::find($id);
+        $nilaiMahasiswa = Nilai::join('mahasiswas', 'nilais.mahasiswa_id', '=', 'mahasiswas.id')
+                            ->select('nilais.*', 'mahasiswas.*')
+                            ->where('mahasiswas.id', $id)
+                            ->get();
+
+        return response()->json($nilaiMahasiswa);
     }
+
+
+    // MahasiswaController.php
+
+    public function updateMahasiswa(Request $request, $id)
+    {
+
+    
+        $request->validate([
+            'nim' => 'required|string|max:15',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'jurusan' => 'required', 
+            'ipk' => 'nullable|numeric', 
+            'sskm' => 'nullable|numeric',
+            'toefl' => 'nullable|numeric', 
+            'karya_tulis' => 'nullable|numeric', 
+        ]);
+
+        // Ambil data mahasiswa dari database berdasarkan ID
+        $mahasiswa = Mahasiswa::find($id);
+
+        if (!$mahasiswa) {
+            return response()->json(['message' => 'Mahasiswa not found'], 404);
+        }
+
+        // Perbarui data mahasiswa
+        $mahasiswa->nim = $request->input('nim');
+        $mahasiswa->nama = $request->input('nama');
+        $mahasiswa->email = $request->input('email');
+        $mahasiswa->jurusan = $request->input('jurusan');
+
+
+        $nilai = Nilai::where('mahasiswa_id', $id)->first();
+
+        // if ($nilai) {
+            // Perbarui nilai atribut sesuai dengan data yang diterima melalui $request
+            $nilai->ipk = $request->input('ipk');
+            $nilai->toefl = $request->input('toefl');
+            $nilai->karya_tulis = $request->input('karya_tulis');
+            $nilai->sskm = $request->input('sskm');
+            // Perbarui kolom lainnya sesuai kebutuhan
+
+            // Simpan perubahan nilai ke database
+            $nilai->save();
+            $mahasiswa->save();
+        // }
+
+        return response()->json(['message' => 'Data mahasiswa berhasil diperbarui']);
+    }
+
     
 }

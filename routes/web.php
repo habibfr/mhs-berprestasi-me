@@ -124,6 +124,9 @@ Route::get('/mahasiswa/filter', [MahasiswaController::class, 'filter'])->name('m
 // get mahasiswa by id
 Route::get('/mahasiswa/get-mahasiswa/{id}', [MahasiswaController::class, 'getMahasiswaById']);
 
+// update mahasiswa by id
+Route::post('/mahasiswa/update-mahasiswa/{id}', [MahasiswaController::class, 'updateMahasiswa']);
+
 
 
 // Route for Peringkat
