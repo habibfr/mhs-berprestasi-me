@@ -3,13 +3,17 @@
 @section('title', 'Mahasiswa')
 
 @section('vendor-style')
-    {{-- Page Css files --}}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
+
     <link href="{{ url('https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('vendor-script')
     {{-- vendor files --}}
     <script src="{{ url('https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js') }}"></script>
+    <script src="{{ url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js') }}">
+    </script>
 @endsection
 
 @section('content')
@@ -68,12 +72,12 @@
                         </select>
 
 
-                        <input class="form-control mx-2 btn-outline-secondary" name="angkatan" type="number" min="2015"
-                            max="2023" step="1" id="year-filter">
+                        <input class="form-control mx-2 btn-outline-secondary w-50" autocomplete="off" name="angkatan"
+                            min="2015" max="2023" id="year-filter">
 
 
                     </div>
-                    <button type="submit" class="btn btn-secondary ">Filter</button>
+                    <button type="submit" class="btn btn-secondary">Filter</button>
                 </form>
 
             </div>
@@ -138,20 +142,22 @@
                 </thead>
                 <tbody>
                     @forelse ($data as $key => $mahasiswa)
+                        {{-- @dd($mahasiswa->nilai->IPK) --}}
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $mahasiswa->nim }}</td>
                             <td>{{ $mahasiswa->nama }}</td>
-                            <td>{{ $mahasiswa['nilai']->IPK }}</td>
-                            <td>{{ $mahasiswa['nilai']->SSKM }}</td>
-                            <td>{{ $mahasiswa['nilai']->TOEFL }}</td>
+                            <td>{{ $mahasiswa->nilai->IPK }}</td>
+                            <td>{{ $mahasiswa->nilai->SSKM }}</td>
+                            <td>{{ $mahasiswa->nilai->TOEFL }}</td>
                             <td>
                                 <div class="inline">
                                     <span data-id="{{ $mahasiswa->id }}" class="text-success btnEdit"
                                         data-bs-toggle="modal" data-bs-target="#modalEditMhs"><i
                                             class="bx bx-edit-alt bx-sm me-2"></i>
                                     </span>
-                                    <span class="text-danger" data-bs-toggle="modal" data-bs-target="#modalHapusMhs"><i
+                                    <span data-id="{{ $mahasiswa->id }}" class="text-danger btnHapus"
+                                        data-bs-toggle="modal" data-bs-target="#modalHapusMhs"><i
                                             class="bx bx-trash bx-sm me-2"></i>
                                         </a>
                                 </div>
@@ -275,7 +281,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger">Iya</button>
+                    <button type="button" id="confirmHapus" class="btn btn-danger">Iya</button>
                 </div>
             </form>
         </div>
@@ -284,6 +290,14 @@
     @push('pricing-script')
         <script>
             $(document).ready(function() {
+
+                $('#year-filter').datepicker({
+                    minViewMode: 2,
+                    autoclose: true,
+                    startDate: "2015",
+                    endDate: "2022",
+                    format: 'yyyy'
+                });
                 $('#tabelMahasiswa').DataTable();
 
                 const dataJurusan = [
@@ -391,6 +405,65 @@
 
 
                 })
+
+
+                $('.btnHapus').click(function() {
+                    // Ambil data-id dari tombol edit mahasiswa
+                    var mahasiswaId = $(this).data('id');
+                    // console.log(mahasiswaId);
+
+                    // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
+                    $('#confirmHapus').click(function() {
+                        $.ajax({
+                            url: '/mahasiswa/delete/' + mahasiswaId,
+                            headers: {
+
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            success: function(data) {
+
+                                // Handle success, maybe update UI or show a message
+                                // $('#modalHapus').modal('hide');
+
+                                var alert = `
+                                            <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+                                                <div class="toast-header">
+                                                    <i class="bx bx-bell me-2"></i>
+                                                    <div class="me-auto fw-medium">Briliant</div>
+                                                    <small>1 seconds ago</small>
+                                                </div>
+                                                <div class="toast-body">
+                                                    ${data.message}
+                                                </div>
+                                            </div>
+                                        `;
+
+                                $('#your-alert-container').html(alert);
+                                $("#confirmHapus").hide();
+                                $("#confirmHapus").attr("disabled", true);
+
+                                setTimeout(function() {
+                                    window.location.reload()
+                                }, 1500);
+
+                                // console.log(data.message);
+
+                            },
+                            error: function(error) {
+                                console.log(error.message);
+                                // Handle errors, maybe show an error message
+                                console.error('Error deleting mahasiswa:', error
+                                    .responseJSON);
+                            }
+                        });
+                    })
+                });
+
+
+
 
             });
         </script>
