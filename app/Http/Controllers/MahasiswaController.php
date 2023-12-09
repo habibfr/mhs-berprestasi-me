@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
+use Illuminate\Support\Facades\DB;
 
 class MahasiswaController extends Controller
 {
@@ -29,15 +30,16 @@ class MahasiswaController extends Controller
             'uploaded_file' => 'required|file|mimes:xls,xlsx'
         ]);
         $the_file = $request->file('uploaded_file');
+
         try{
             $spreadsheet = IOFactory::load($the_file->getRealPath());
             $sheet        = $spreadsheet->getActiveSheet();
             $row_limit    = $sheet->getHighestDataRow();
             $column_limit = $sheet->getHighestDataColumn();
             $row_range    = range( 2, $row_limit );
-            $column_range = range( 'H', $column_limit );
+            // $column_range = range( 'H', $column_limit );
             $startcount = 2;
-            $data = array();
+            // $data = array();
 
             $jumlahBaris = Mahasiswa::count()+1;
 
@@ -51,22 +53,39 @@ class MahasiswaController extends Controller
                     'jurusan' => $sheet->getCell( 'D' . $row )->getValue(),
                     'email' => $sheet->getCell( 'E' . $row )->getValue(),
                 ];
+            }
+            Mahasiswa::insert($dataMahasiswa);
 
 
+            foreach ( $row_range as $row ) {
+                $mahasiswa = Mahasiswa::where('nim', $sheet->getCell( 'B' . $row )->getValue())->first();
+                // dd()
                 $dataNilai[] = [
                     // 'CustomerName' =>$sheet->getCell( 'A' . $row )->getValue(),
                     // 'nim' => $sheet->getCell( 'B' . $row )->getValue(),
                 
-                    'mahasiswa_id' => $jumlahBaris++,
+                    'mahasiswa_id' => $mahasiswa->id,
                     'IPK' =>$sheet->getCell( 'F' . $row )->getValue(),
                     'SSKM' =>$sheet->getCell( 'G' . $row )->getValue(),
                     'TOEFL' =>$sheet->getCell( 'H' . $row )->getValue(),
                 ];
-                $startcount++;
             }
-
-            Mahasiswa::insert($dataMahasiswa);
+            // Insert into Nilai table
             Nilai::insert($dataNilai);
+
+            // try {
+            //     // Insert into Mahasiswa table
+                
+
+            //     // If everything is successful, commit the transaction
+            //     DB::commit();
+            // } catch (\Exception $e) {
+            //     // If an exception occurs, rollback the transaction
+            //     DB::rollback();
+
+            //     // Log or print the exception message for debugging
+            //     dd($e->getMessage());
+            // }
             
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '23000') {
@@ -190,6 +209,25 @@ class MahasiswaController extends Controller
         // }
 
         return response()->json(['message' => 'Data mahasiswa berhasil diperbarui']);
+    }
+
+
+    public function destroy($id)
+    {
+        $mahasiswa = Mahasiswa::find($id);
+        $nilai = Nilai::where('mahasiswa_id', $id)->first();
+
+
+        if ($mahasiswa) {
+            $mahasiswa->delete();
+            $nilai->delete();
+
+            // You can return a response if needed
+            return response()->json(['message' => 'Mahasiswa deleted successfully']);
+        } else {
+            // Return a response indicating that the Mahasiswa was not found
+            return response()->json(['error' => 'Mahasiswa not found'], 404);
+        }
     }
 
     

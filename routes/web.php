@@ -127,6 +127,8 @@ Route::get('/mahasiswa/get-mahasiswa/{id}', [MahasiswaController::class, 'getMah
 // update mahasiswa by id
 Route::post('/mahasiswa/update-mahasiswa/{id}', [MahasiswaController::class, 'updateMahasiswa']);
 
+// hapus mahasiswa by id
+Route::post('/mahasiswa/delete/{id}', [MahasiswaController::class, 'destroy']);
 
 
 // Route for Peringkat
