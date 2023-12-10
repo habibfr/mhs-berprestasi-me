@@ -59,33 +59,17 @@ class MahasiswaController extends Controller
 
             foreach ( $row_range as $row ) {
                 $mahasiswa = Mahasiswa::where('nim', $sheet->getCell( 'B' . $row )->getValue())->first();
-                // dd()
-                $dataNilai[] = [
-                    // 'CustomerName' =>$sheet->getCell( 'A' . $row )->getValue(),
-                    // 'nim' => $sheet->getCell( 'B' . $row )->getValue(),
                 
+                $dataNilai[] = [
                     'mahasiswa_id' => $mahasiswa->id,
                     'IPK' =>$sheet->getCell( 'F' . $row )->getValue(),
                     'SSKM' =>$sheet->getCell( 'G' . $row )->getValue(),
                     'TOEFL' =>$sheet->getCell( 'H' . $row )->getValue(),
+                    'karya_tulis' =>$sheet->getCell( 'I' . $row )->getValue(),
                 ];
             }
             // Insert into Nilai table
             Nilai::insert($dataNilai);
-
-            // try {
-            //     // Insert into Mahasiswa table
-                
-
-            //     // If everything is successful, commit the transaction
-            //     DB::commit();
-            // } catch (\Exception $e) {
-            //     // If an exception occurs, rollback the transaction
-            //     DB::rollback();
-
-            //     // Log or print the exception message for debugging
-            //     dd($e->getMessage());
-            // }
             
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '23000') {

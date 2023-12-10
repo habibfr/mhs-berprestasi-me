@@ -3,8 +3,11 @@
 @section('title', 'Mahasiswa')
 
 @section('vendor-style')
+
+
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
+
 
     <link href="{{ url('https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.css') }}" rel="stylesheet">
 @endsection
@@ -73,7 +76,7 @@
 
 
                         <input class="form-control mx-2 btn-outline-secondary w-50" autocomplete="off" name="angkatan"
-                            min="2015" max="2023" id="year-filter">
+                            min="2015" max="2023" id="year-filter" placeholder="Pilih Tahun">
 
 
                     </div>
@@ -120,24 +123,26 @@
                 aria-describedby="tabelMahasiswa_info">
                 <thead>
                     <tr class="table-primary">
-                        <th class="sorting sorting_asc" tabindex="0" aria-controls="tabelMahasiswa" rowspan="1"
-                            colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending"
-                            style="width: 86px;">No
+                        <th class="sorting sorting_asc" tabindex="0" aria-controls="tabelMahasiswa" aria-sort="ascending"
+                            aria-label="No: activate to sort column descending" style="width: 0px;">No
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="Position: activate to sort column ascending" style="width: 132px;">NIM
+                            aria-label="NIM: activate to sort column ascending" style="width: 66px;">NIM
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="Office: activate to sort column ascending" style="width: 66px;">Nama</th>
+                            aria-label="Nama: activate to sort column ascending" style="width: 132px;">Nama</th>
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="Age: activate to sort column ascending" style="width: 26px;">IPK</th>
+                            aria-label="IPK: activate to sort column ascending" style="width: 55px;">IPK</th>
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="Start date: activate to sort column ascending" style="width: 53px;">SSKM
+                            aria-label="SSKM: activate to sort column ascending" style="width: 55px;">SSKM
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="Salary: activate to sort column ascending" style="width: 55px;">TOEFL</th>
+                            aria-label="Karya Tulis: activate to sort column ascending" style="width: 55px;">Karya Tulis
+                        </th>
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="Salary: activate to sort column ascending" style="width: 55px;">Action</th>
+                            aria-label="TOEFL: activate to sort column ascending" style="width: 55px;">TOEFL</th>
+                        <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
+                            aria-label="Action: activate to sort column ascending" style="width: 55px;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,11 +150,12 @@
                         {{-- @dd($mahasiswa->nilai->IPK) --}}
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $mahasiswa->nim }}</td>
-                            <td>{{ $mahasiswa->nama }}</td>
-                            <td>{{ $mahasiswa->nilai->IPK }}</td>
-                            <td>{{ $mahasiswa->nilai->SSKM }}</td>
-                            <td>{{ $mahasiswa->nilai->TOEFL }}</td>
+                            <td>{{ $mahasiswa->nim ?? '' }}</td>
+                            <td>{{ $mahasiswa->nama ?? '' }}</td>
+                            <td>{{ $mahasiswa->nilai->IPK ?? 0 }}</td>
+                            <td>{{ $mahasiswa->nilai->SSKM ?? 0 }}</td>
+                            <td>{{ $mahasiswa->nilai->karya_tulis ?? 0 }}</td>
+                            <td>{{ $mahasiswa->nilai->TOEFL ?? 0 }}</td>
                             <td>
                                 <div class="inline">
                                     <span data-id="{{ $mahasiswa->id }}" class="text-success btnEdit"
@@ -298,7 +304,16 @@
                     endDate: "2022",
                     format: 'yyyy'
                 });
-                $('#tabelMahasiswa').DataTable();
+                $('#tabelMahasiswa').DataTable({
+                    pageLength: 5,
+                    lengthMenu: [3, 5, 10, 20],
+                    pagingType: 'full_numbers',
+
+
+
+                });
+
+                // $('.dataTables_length').addClass('bs-select');
 
                 const dataJurusan = [
                     "S1 Sistem Informasi",
@@ -371,8 +386,6 @@
                             // Tambahkan data lain sesuai kebutuhan
                         },
                         success: function(response) {
-
-
                             // $('#modalEditMhs').modal('hide');
 
                             // Tanggapi success
@@ -401,9 +414,6 @@
                             // Lakukan tindakan lainnya jika diperlukan
                         }
                     });
-
-
-
                 })
 
 
@@ -461,10 +471,6 @@
                         });
                     })
                 });
-
-
-
-
             });
         </script>
     @endpush
