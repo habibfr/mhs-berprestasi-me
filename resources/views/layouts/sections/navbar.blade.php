@@ -4,7 +4,7 @@
             <h1 class="fw-bold" style="position: relative;">
                 KRILIN
                 <div class="position-absolute" style="top: 0; right: 0;">
-                    <form action="/logout" method="POST">
+                    <form action="{{ route('auth-login-basic') }}">
                         <button class="btn btn-outline-danger">Logout</button>
                     </form>
                 </div>
