@@ -26,7 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('nilai', function (Blueprint $table) {
+        Schema::table('nilais', function (Blueprint $table) {
             $table->dropForeign("fk_nilai_to_mahasiswa");
-        });    }
+        });    
+    }
 };
