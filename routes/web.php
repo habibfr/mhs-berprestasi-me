@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RankingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -132,10 +133,11 @@ Route::post('/mahasiswa/delete/{id}', [MahasiswaController::class, 'destroy']);
 
 
 // Route for Peringkat
-Route::get('/peringkat', function () {
-    return view('content.peringkat.index');
-})
-        ->name('peringkat');
+Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peringkat');
+// Route::get('/peringkat', function () {
+//     return view('content.peringkat.index');
+// })
+//         ->name('peringkat');
 
 // Route for Kriteria
 Route::get('/kriteria', function () {
