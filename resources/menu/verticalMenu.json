@@ -7,10 +7,22 @@
       "url": "mahasiswa"
     },
     {
+      "name": "Nilai",
+      "icon": "menu-icon tf-icons bx bx-bitcoin",
+      "slug": "nilai",
+      "url": "nilai"
+    },
+    {
       "name": "Kriteria",
       "icon": "menu-icon tf-icons bx bx-list-ul",
       "slug": "kriteria",
       "url": "kriteria"
+    },
+    {
+      "name": "Ranking",
+      "icon": "menu-icon tf-icons bx bx-crown",
+      "slug": "ranking",
+      "url": "ranking"
     },
     {
       "menuHeader": "Template"
