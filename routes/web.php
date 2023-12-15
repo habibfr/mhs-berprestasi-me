@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\RankingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
@@ -132,6 +134,11 @@ Route::post('/mahasiswa/update-mahasiswa/{id}', [MahasiswaController::class, 'up
 Route::post('/mahasiswa/delete/{id}', [MahasiswaController::class, 'destroy']);
 
 
+
+// Route for Nilai
+Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai');
+
+
 // Route for Peringkat
 Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peringkat');
 // Route::get('/peringkat', function () {
@@ -140,7 +147,16 @@ Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peri
 //         ->name('peringkat');
 
 // Route for Kriteria
-Route::get('/kriteria', function () {
-    return view('content.kriteria.index');
-})
-        ->name('kriteria');
+Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria');
+
+// get kriteria by id
+Route::get('/kriteria/get-kriteria/{id}', [KriteriaController::class, 'getKriteriaById']);
+
+// update mahasiswa by id
+Route::post('/kriteria/update-kriteria/{id}', [KriteriaController::class, 'updateKriteria']);
+
+
+
+
+// Route for Ranking
+Route::get('/ranking    ', [RankingController::class, 'index'])->name('ranking');

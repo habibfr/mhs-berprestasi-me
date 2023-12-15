@@ -1,260 +1,265 @@
-@extends('layouts/blankLayout')
+@extends('layouts/contentNavbarLayout')
 
-@section('title', 'Kriteria')
+@section('title', 'Mahasiswa')
+
+@section('vendor-style')
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
+
+    <link href="{{ url('https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.css') }}" rel="stylesheet">
+@endsection
+
+@section('vendor-script')
+    {{-- vendor files --}}
+    <script src="{{ url('https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js') }}"></script>
+    <script src="{{ url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js') }}">
+    </script>
+@endsection
 
 @section('content')
-    {{-- <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <div id="floatingInputHelp mb-2" class="form-text">Filter by jurusan dan angkatan</div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-outline-danger dropdown-toggle px-3" data-bs-toggle="dropdown"
-                        aria-expanded="false">S1 Sistem Informasi</button>
-                    <ul class="dropdown-menu" style="">
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Sistem Informasi</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">D3 Sistem Informasi</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Teknik Komputer</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Desain Komunikasi Visual</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">S1 Manajemen</a></li>
-                    </ul>
-                    <input class="form-control mx-2 btn-outline-danger" type="number" min="2015" max="2023"
-                        step="1" value="2021" id="year-filter">
-                </div>
-                <button type="button" class="btn btn-danger ">Filter</button>
-            </div>
+    {{-- success upload --}}
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible" role="alert">
+            {{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
         </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+
+    {{-- error filter --}}
+    @if ($errors->has('jurusan'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            This is a danger {{ $errors->first('jurusan') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    @endif
+
+    @if ($errors->has('angkatan'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            This is a danger {{ $errors->first('angkatan') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    @endif
+
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tabel /</span> Kriteria</h4>
+
+    {{-- <div id="your-alert-container"></div>
+
+    <div class="row">
         <div class="col">
-            <div class="float-end">
-                <div id="floatingInputHelp mb-2" class="form-text">Tambah kriteria</div>
-                <button type="button" class="btn btn-danger">Tambah</button>
+            <div class="float-end mb-2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary square" type="submit"><i class='bx bx-plus'></i>
+                        Tambah</button>
+                </div>
             </div>
         </div>
     </div> --}}
 
-    <div class="mb-2">
-        <div class="row">
-            <div class="col">
-                {{-- <div class="navbar-nav align-items-center"> --}}
-                <div class="">
-                    <div id="floatingInputHelp" class="form-text">Pencarian kriteria</div>
-
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <div class="card">
-                                <div class="align-items-center py-1">
-                                    <div class="mx-3 d-flex align-items-center ">
-                                        <i class="bx bx-search fs-4 lh-0"></i>
-                                        <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2"
-                                            placeholder="Search..." aria-label="Search...">
-                                    </div>
-                                </div>
-
-                            </div>
-                            {{-- <button type="button" class="btn btn-danger">Danger</button> --}}
-                        </div>
-                    </div>
-                </div>
-                {{-- </div> --}}
-            </div>
-            <div class="col">
-                <div class="float-end">
-                    <div id="floatingInputHelp mb-2" class="form-text">Tambah kriteria</div>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                        data-bs-target="#modalAddKriteria">Tambah</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    {{-- modal add kriteria --}}
-    <div class="modal fade" id="modalAddKriteria" data-bs-backdrop="static" tabindex="-1" style="display: none;"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Edit Kriteria</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label for="nameBasic" class="form-label">Name</label>
-                            <input type="text" id="nameBasic" class="form-control" placeholder="Enter Name">
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col mb-0">
-                            <label for="emailBasic" class="form-label">Email</label>
-                            <input type="email" id="emailBasic" class="form-control" placeholder="xxxx@xxx.xx">
-                        </div>
-                        <div class="col mb-0">
-                            <label for="dobBasic" class="form-label">DOB</label>
-                            <input type="date" id="dobBasic" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Basic Bootstrap Table -->
+    {{-- Tabel Kriteria --}}
     <div class="card">
-        <h5 class="card-header">Table Basic</h5>
-        <div class="table-responsive text-nowrap">
-            <table class="table">
+        <div class="table-responsive text-nowrap m-4">
+            <table id="tabelKriteria" class="table table-striped dataTable" style="width: 100%;"
+                aria-describedby="tabelKriteria_info">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Id</th>
-                        <th>Nama</th>
-                        <th>Bobot</th>
-                        <th>Actions</th>
+                    <tr class="table-primary">
+                        <th class="sorting sorting_asc" tabindex="0" aria-controls="tabelKriteria" aria-sort="ascending"
+                            aria-label="No: activate to sort column descending" style="width: 0px;">No
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="tabelKriteria" colspan="1"
+                            aria-label="Nama: activate to sort column ascending" style="width: 132px;">Kriteria</th>
+                        <th class="sorting" tabindex="0" aria-controls="tabelKriteria" colspan="1"
+                            aria-label="Atribut: activate to sort column ascending" style="width: 55px;">Atribut</th>
+                        <th class="sorting" tabindex="0" aria-controls="tabelKriteria" colspan="1"
+                            aria-label="Bobot: activate to sort column ascending" style="width: 55px;">Bobot</th>
+                        <th class="sorting" tabindex="0" aria-controls="tabelKriteria" colspan="1"
+                            aria-label="Action: activate to sort column ascending" style="width: 55px;">Action</th>
                     </tr>
                 </thead>
-                <tbody class="table-border-bottom-0">
-                    <tr>
-                        <td>1</td>
-                        <td>K001</td>
-                        <td>IPK</td>
-                        <td>0.4</td>
-                        <td>
-                            <div class="inline">
-                                <span class="text-success" data-bs-toggle="modal" data-bs-target="#modalEditKriteria"><i
-                                        class="bx bx-edit-alt bx-sm me-2"></i>
-                                </span>
-                                <span class="text-danger" data-bs-toggle="modal" data-bs-target="#modalHapusKriteria"><i
-                                        class="bx bx-trash bx-sm me-2"></i>
-                                    </a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td>K002</td>
-                        <td>SSKM</td>
-                        <td>0.2</td>
-                        <td>
-                            <div class="inline">
-                                <span class="text-success" data-bs-toggle="modal" data-bs-target="#modalEditKriteria"><i
-                                        class="bx bx-edit-alt bx-sm me-2"></i>
-                                </span>
-                                <span class="text-danger" data-bs-toggle="modal" data-bs-target="#modalHapusKriteria"><i
-                                        class="bx bx-trash bx-sm me-2"></i>
-                                    </a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>3</td>
-                        <td>K003</td>
-                        <td>TOEFL</td>
-                        <td>0.2</td>
-                        <td>
-                            <div class="inline">
-                                <span class="text-success" data-bs-toggle="modal" data-bs-target="#modalEditKriteria"><i
-                                        class="bx bx-edit-alt bx-sm me-2"></i>
-                                </span>
-                                <span class="text-danger" data-bs-toggle="modal" data-bs-target="#modalHapusKriteria"><i
-                                        class="bx bx-trash bx-sm me-2"></i>
-                                    </a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>4</td>
-                        <td>K004</td>
-                        <td>Karya Tulis</td>
-                        <td>0.2</td>
-                        <td>
-                            <div class="inline">
-                                <span class="text-success" data-bs-toggle="modal" data-bs-target="#modalEditKriteria"><i
-                                        class="bx bx-edit-alt bx-sm me-2"></i>
-                                </span>
-                                <span class="text-danger" data-bs-toggle="modal" data-bs-target="#modalHapusKriteria"><i
-                                        class="bx bx-trash bx-sm me-2"></i>
-                                    </a>
-                            </div>
-                        </td>
-                    </tr>
-
+                <tbody>
+                    @forelse ($data as $key => $kriteria)
+                        <tr>
+                            <td>{{ ++$key }}</td>
+                            <td>{{ $kriteria->kriteria ?? '' }}</td>
+                            <td>{{ $kriteria->atribut ?? '' }}</td>
+                            <td>{{ $kriteria->bobot ?? 0 }}</td>
+                            <td>
+                                <div class="inline">
+                                    <span data-id="{{ $kriteria->id }}" class="text-success btnEdit" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditKriteria"><i class="bx bx-edit-alt bx-sm me-2"></i>
+                                    </span>
+                                    {{-- <span data-id="{{ $kriteria->id }}" class="text-danger btnHapus" data-bs-toggle="modal"
+                                        data-bs-target="#modalHapusKriteria"><i class="bx bx-trash bx-sm me-2"></i>
+                                        </a> --}}
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <p>Maaf data masih kosong!</p>
+                    @endforelse
                 </tbody>
             </table>
 
+        </div>
+    </div>
+    {{-- End Tabel Kriteria --}}
 
-            {{-- modal edit kriteria --}}
-            <div class="modal fade" id="modalEditKriteria" data-bs-backdrop="static" tabindex="-1"
-                style="display: none;" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel1">Edit Kriteria</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="nameBasic" class="form-label">Name</label>
-                                    <input type="text" id="nameBasic" class="form-control" placeholder="Enter Name">
-                                </div>
+    {{-- modal edit --}}
+    <div class="modal fade" id="modalEditKriteria" data-bs-backdrop="static" tabindex="-1" style="display: none;"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="labelEditMhs">Edit Data Kriteria</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row g-2">
+                            <div class="col mb-3">
+                                <label for="id_kriteria" class="form-label">ID</label>
+                                <input type="number" id="id_kriteria" class="form-control" placeholder="0" readonly
+                                    disabled>
                             </div>
-                            <div class="row g-2">
-                                <div class="col mb-0">
-                                    <label for="emailBasic" class="form-label">Email</label>
-                                    <input type="email" id="emailBasic" class="form-control"
-                                        placeholder="xxxx@xxx.xx">
-                                </div>
-                                <div class="col mb-0">
-                                    <label for="dobBasic" class="form-label">DOB</label>
-                                    <input type="date" id="dobBasic" class="form-control">
-                                </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="kriteria_kriteria" class="form-label">Kriteria</label>
+                                <input type="text" id="kriteria_kriteria" class="form-control" placeholder="IPK"
+                                    required disabled>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary"
-                                data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger">Save changes</button>
+
+                        <div class="row g-2">
+
+                            <div class="col mb-3">
+                                <label for="atribut_kriteria" class="form-label">Atribut</label>
+                                <select id="atribut_kriteria" class="form-select" name="atribut_kriteria" required>
+                                    <option>Pilih Atribut</option>
+                                    <option value="benefit">Benefit</option>
+                                    <option value="cost">Cost</option>
+
+                                </select>
+                            </div>
                         </div>
+
+                        <div class="row g-2">
+                            <div class="col mb-3">
+                                <label for="bobot_kriteria" class="form-label">Bobot</label>
+                                <input type="number" id="bobot_kriteria" class="form-control" placeholder="3"
+                                    min="1" max="10">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="btnModalEditKriteria">Save changes</button>
                     </div>
                 </div>
-            </div>
-
-            {{-- modal confirm delete --}}
-            <div class="modal fade" id="modalHapusKriteria" data-bs-backdrop="static" tabindex="-1"
-                style="display: none;" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="backDropModalTitle">Hapus Kriteria</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Are you sure to delete this??</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary"
-                                data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger">Iya</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+            </form>
         </div>
     </div>
 
+
+    @push('pricing-script')
+        <script>
+            $(document).ready(function() {
+                $('#tabelKriteria').DataTable({
+                    pageLength: 5,
+                    lengthMenu: [3, 5, 10, 20],
+                    pagingType: 'full_numbers',
+                });
+
+                // Ketika tombol edit diklik
+                $('.btnEdit').click(function() {
+                    // Ambil data-id dari tombol edit mahasiswa
+                    var kriteriaId = $(this).data('id');
+                    // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
+                    $.ajax({
+                        url: '/kriteria/get-kriteria/' + kriteriaId,
+                        method: 'GET',
+                        dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
+                        success: function(data) {
+                            // Update konten modal dengan data yang diterima
+                            $('#id_kriteria').val(data.id);
+                            $('#kriteria_kriteria').val(data.kriteria);
+                            $('#atribut_kriteria').val(data.atribut);
+                            $('#bobot_kriteria').val(data.bobot);
+
+                            $('#modalEditKriteria').modal('show');
+                        },
+                        error: function() {
+                            console.log('Gagal mengambil data mahasiswa.');
+                        }
+                    });
+                });
+
+
+                $('#btnModalEditKriteria').click(function() {
+                    // JavaScript
+                    // $("btnModalEditKriteria").attr("disabled", true);
+                    kriteriaId = $('#id_kriteria').val();
+
+                    $.ajax({
+                        type: 'POST',
+                        headers: {
+
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+                        },
+                        url: `/kriteria/update-kriteria/${kriteriaId}`,
+                        data: {
+                            '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
+                            'atribut': $('#atribut_kriteria').val(),
+                            'bobot': $('#bobot_kriteria').val(),
+                        },
+                        success: function(response) {
+
+                            var alert = `
+                                            <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+                                                <div class="toast-header">
+                                                    <i class="bx bx-bell me-2"></i>
+                                                    <div class="me-auto fw-medium">Briliant</div>
+                                                    <small>1 seconds ago</small>
+                                                </div>
+                                                <div class="toast-body">
+                                                    ${response.message}
+                                                </div>
+                                            </div>
+                                        `;
+
+                            $('#your-alert-container').html(alert);
+
+                            setTimeout(function() {
+                                window.location.reload()
+                            }, 1500);
+                        },
+                        error: function(error) {
+                            // Tanggapi error
+                            console.error(error.message);
+                            // Lakukan tindakan lainnya jika diperlukan
+                        }
+                    });
+                })
+            });
+        </script>
+    @endpush
 
 
 @endsection
