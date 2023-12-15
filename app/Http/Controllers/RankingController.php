@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 class RankingController extends Controller
 {
     public function index(){
-        return;
+
+        $data = Ranking::orderBy('skor', 'desc')->get();
+        return view("content.ranking.index", compact('data'));
     }
 
     public function prosesHitung(){
@@ -53,7 +55,13 @@ class RankingController extends Controller
 
         // return $preferensi;
 
-        $this->sawCalculation($data_alternatif, $data_kriteria, $X);
+        try {
+            //code...
+            $this->sawCalculation($data_alternatif, $data_kriteria, $X);
+        } catch (\Throwable $th) {
+            session()->flash('error', 'Terjadi kesalahan pada server');
+                return redirect()->back();
+        }
         
       
         // dd($result);
@@ -91,7 +99,7 @@ class RankingController extends Controller
 
         // Menentukan Matriks Normalisasi (R)
         
-        return view('content.peringkat.index', compact('data_alternatif'));
+        return back()->withSuccess('Great! Perhitungan berhasil.');
  
     }
 

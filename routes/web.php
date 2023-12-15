@@ -147,7 +147,7 @@ Route::post('/nilai/update-nilai/{id}', [NilaiController::class, 'updateNilai'])
 
 
 // Route for Peringkat
-Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peringkat');
+// Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peringkat');
 // Route::get('/peringkat', function () {
 //     return view('content.peringkat.index');
 // })
@@ -166,4 +166,6 @@ Route::post('/kriteria/update-kriteria/{id}', [KriteriaController::class, 'updat
 
 
 // Route for Ranking
-Route::get('/ranking    ', [RankingController::class, 'index'])->name('ranking');
+Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');
+
+Route::get('/ranking/hitung', [RankingController::class, 'prosesHitung'])->name('ranking.hitung');
