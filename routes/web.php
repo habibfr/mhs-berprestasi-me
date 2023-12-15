@@ -138,6 +138,13 @@ Route::post('/mahasiswa/delete/{id}', [MahasiswaController::class, 'destroy']);
 // Route for Nilai
 Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai');
 
+// get nilai by id
+Route::get('/nilai/get-nilai/{id}', [NilaiController::class, 'getNilaiByMhsId']);
+
+
+// update mahasiswa by id
+Route::post('/nilai/update-nilai/{id}', [NilaiController::class, 'updateNilai']);
+
 
 // Route for Peringkat
 Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peringkat');
