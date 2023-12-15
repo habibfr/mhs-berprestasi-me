@@ -1,13 +1,11 @@
-@extends('layouts/blankLayout')
+@extends('layouts/contentNavbarLayout')
 
 @section('title', 'Mahasiswa')
 
 @section('vendor-style')
 
-
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
-
 
     <link href="{{ url('https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.css') }}" rel="stylesheet">
 @endsection
@@ -20,7 +18,6 @@
 @endsection
 
 @section('content')
-
     {{-- success upload --}}
     @if ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -55,8 +52,9 @@
         </div>
     @endif
 
-    <div id="your-alert-container"></div>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tabel /</span> Kriteria</h4>
 
+    <div id="your-alert-container"></div>
 
     <div class="row">
         <div class="col">
@@ -67,7 +65,7 @@
                 <form action="{{ route('mahasiswa.filter') }}" method="GET">
                     @csrf
                     <div class="btn-group">
-                        <select id="defaultSelect" class="form-select btn-outline-secondary" name="jurusan">
+                        <select id="defaultSelect" class="form-select btn-outline-primary" name="jurusan">
                             <option value="0">Pilih Jurusan</option>
                             <option value="1">Sistem Infromasi</option>
                             <option value="2">S1 Desain Komunikasi Visual</option>
@@ -75,12 +73,12 @@
                         </select>
 
 
-                        <input class="form-control mx-2 btn-outline-secondary w-50" autocomplete="off" name="angkatan"
+                        <input class="form-control mx-2 btn-outline-primary w-50" autocomplete="off" name="angkatan"
                             min="2015" max="2023" id="year-filter" placeholder="Pilih Tahun">
 
 
                     </div>
-                    <button type="submit" class="btn btn-secondary">Filter</button>
+                    <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
 
             </div>
@@ -106,7 +104,7 @@
                                 </p>
                             @endif
                             <div class="input-group-append" id="button-addon2">
-                                <button class="btn btn-secondary square" type="submit"><i class="ft-upload mr-1"></i>
+                                <button class="btn btn-primary square" type="submit"><i class="ft-upload mr-1"></i>
                                     Upload</button>
                             </div>
                         </div>
@@ -131,16 +129,19 @@
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
                             aria-label="Nama: activate to sort column ascending" style="width: 132px;">Nama</th>
+
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="IPK: activate to sort column ascending" style="width: 55px;">IPK</th>
+                            aria-label="Email: activate to sort column ascending" style="width: 132px;">Email</th>
+
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="SSKM: activate to sort column ascending" style="width: 55px;">SSKM
-                        </th>
+                            aria-label="Prodi: activate to sort column ascending" style="width: 132px;">Prodi</th>
+
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="Karya Tulis: activate to sort column ascending" style="width: 55px;">Karya Tulis
-                        </th>
+                            aria-label="Alamat: activate to sort column ascending" style="width: 132px;">Alamat</th>
+
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
-                            aria-label="TOEFL: activate to sort column ascending" style="width: 55px;">TOEFL</th>
+                            aria-label="No Hp: activate to sort column ascending" style="width: 132px;">No HP</th>
+
                         <th class="sorting" tabindex="0" aria-controls="tabelMahasiswa" colspan="1"
                             aria-label="Action: activate to sort column ascending" style="width: 55px;">Action</th>
                     </tr>
@@ -148,14 +149,15 @@
                 <tbody>
                     @forelse ($data as $key => $mahasiswa)
                         {{-- @dd($mahasiswa->nilai->IPK) --}}
+                        {{-- {{ dd($data) }} --}}
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $mahasiswa->nim ?? '' }}</td>
                             <td>{{ $mahasiswa->nama ?? '' }}</td>
-                            <td>{{ $mahasiswa->nilai->IPK ?? 0 }}</td>
-                            <td>{{ $mahasiswa->nilai->SSKM ?? 0 }}</td>
-                            <td>{{ $mahasiswa->nilai->karya_tulis ?? 0 }}</td>
-                            <td>{{ $mahasiswa->nilai->TOEFL ?? 0 }}</td>
+                            <td>{{ $mahasiswa->email ?? '' }}</td>
+                            <td>{{ $mahasiswa->jurusan ?? '' }}</td>
+                            <td>{{ $mahasiswa->alamat ?? '' }}</td>
+                            <td>{{ $mahasiswa->no_hp ?? '' }}</td>
                             <td>
                                 <div class="inline">
                                     <span data-id="{{ $mahasiswa->id }}" class="text-success btnEdit"
@@ -243,29 +245,20 @@
 
                         <div class="row g-2">
                             <div class="col mb-3">
-                                <label for="ipk_mhs" class="form-label">IPK</label>
-                                <input type="number" id="ipk_mhs" class="form-control" placeholder="3.50">
+                                <label for="alamat_mhs" class="form-label">Domisili</label>
+                                <input type="text" id="alamat_mhs" class="form-control" placeholder="Surabaya"
+                                    name="alamat_mhs">
                             </div>
                             <div class="col mb-3">
-                                <label for="sskm_mhs" class="form-label">SSKM</label>
-                                <input type="number" id="sskm_mhs" class="form-control" placeholder="200">
-                            </div>
-                        </div>
-
-                        <div class="row g-2">
-                            <div class="col mb-3">
-                                <label for="toefl_mhs" class="form-label">TOEFL</label>
-                                <input type="number" id="toefl_mhs" class="form-control" placeholder="500">
-                            </div>
-                            <div class="col mb-3">
-                                <label for="karya_tulis_mhs" class="form-label">Karya Tulis</label>
-                                <input type="number" id="karya_tulis_mhs" class="form-control" placeholder="2">
+                                <label for="no_hp_mhs" class="form-label">No Hp</label>
+                                <input type="text" id="no_hp_mhs" class="form-control" placeholder="+6281234123123"
+                                    name="no_hp_mhs">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" id="btnModalEditMhs">Save changes</button>
+                        <button type="button" class="btn btn-success" id="btnModalEditMhs">Save changes</button>
                     </div>
                 </div>
             </form>
@@ -309,8 +302,6 @@
                     lengthMenu: [3, 5, 10, 20],
                     pagingType: 'full_numbers',
 
-
-
                 });
 
                 // $('.dataTables_length').addClass('bs-select');
@@ -333,23 +324,15 @@
                         method: 'GET',
                         dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
                         success: function(data) {
-
-
                             // console.log(data);
                             // Update konten modal dengan data yang diterima
-                            $('#id_mhs').val(data[0].id);
-                            $('#nim_mhs').val(data[0].nim);
-                            $('#nama_mhs').val(data[0].nama);
-                            $('#jurusan_mhs').val(dataJurusan.indexOf(data[0].jurusan) + 1);
-                            $('#email_mhs').val(data[0].email);
-                            $('#ipk_mhs').val(data[0].IPK);
-                            $('#sskm_mhs').val(data[0].SSKM);
-                            $('#toefl_mhs').val(data[0].TOEFL);
-                            if (data[0].karya_tulis == null || data[0].karya_tulis == 0) {
-                                $('#karya_tulis_mhs').val(0);
-                            } else {
-                                $('#karya_tulis_mhs').val(data[0].karya_tulis);
-                            }
+                            $('#id_mhs').val(data.id);
+                            $('#nim_mhs').val(data.nim);
+                            $('#nama_mhs').val(data.nama);
+                            $('#jurusan_mhs').val(dataJurusan.indexOf(data.jurusan) + 1);
+                            $('#email_mhs').val(data.email);
+                            $('#alamat_mhs').val(data.alamat);
+                            $('#no_hp_mhs').val(data.no_hp);
                             // Tampilkan modal
                             $('#modalEditMhs').modal('show');
                         },
@@ -368,9 +351,7 @@
                     $.ajax({
                         type: 'POST',
                         headers: {
-
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
                         },
                         url: `/mahasiswa/update-mahasiswa/${mahasiswaId}`,
                         data: {
@@ -379,15 +360,13 @@
                             'nama': $('#nama_mhs').val(),
                             'email': $('#email_mhs').val(),
                             'jurusan': dataJurusan[$('#jurusan_mhs').val() - 1],
-                            'ipk': $('#ipk_mhs').val(),
-                            'sskm': $('#sskm_mhs').val(),
-                            'toefl': $('#toefl_mhs').val(),
-                            'karya_tulis': $('#karya_tulis_mhs').val(),
-                            // Tambahkan data lain sesuai kebutuhan
+                            'alamat': $('#alamat_mhs').val(),
+                            'no_hp': $('#no_hp_mhs').val(),
                         },
                         success: function(response) {
                             // $('#modalEditMhs').modal('hide');
-
+                            $("#btnModalEditMhs").hide();
+           
                             // Tanggapi success
                             var alert = `
                                             <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
@@ -410,7 +389,7 @@
                         },
                         error: function(error) {
                             // Tanggapi error
-                            console.error(error);
+                            console.error(error.message);
                             // Lakukan tindakan lainnya jika diperlukan
                         }
                     });
@@ -427,9 +406,7 @@
                         $.ajax({
                             url: '/mahasiswa/delete/' + mahasiswaId,
                             headers: {
-
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
                             },
                             method: 'post',
                             dataType: 'json',

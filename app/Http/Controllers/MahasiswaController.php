@@ -44,32 +44,36 @@ class MahasiswaController extends Controller
             $jumlahBaris = Mahasiswa::count()+1;
 
 
-
-            foreach ( $row_range as $row ) {
-                $dataMahasiswa[] = [
-                    // 'CustomerName' =>$sheet->getCell( 'A' . $row )->getValue(),
-                    'nim' => $sheet->getCell( 'B' . $row )->getValue(),
-                    'nama' => $sheet->getCell( 'C' . $row )->getValue(),
-                    'jurusan' => $sheet->getCell( 'D' . $row )->getValue(),
-                    'email' => $sheet->getCell( 'E' . $row )->getValue(),
-                ];
+            foreach ($row_range as $row) {
+                Mahasiswa::updateOrCreate(
+                    ['nim' => $sheet->getCell('B' . $row)->getValue()],
+                    [
+                        'nama' => $sheet->getCell('C' . $row)->getValue(),
+                        'jurusan' => $sheet->getCell('D' . $row)->getValue(),
+                        'email' => $sheet->getCell('E' . $row)->getValue(),
+                        'alamat' => $sheet->getCell('F' . $row)->getValue(),
+                        'no_hp' => $sheet->getCell('G' . $row)->getValue(),
+                    ]
+                );
             }
-            Mahasiswa::insert($dataMahasiswa);
+    
 
-
-            foreach ( $row_range as $row ) {
-                $mahasiswa = Mahasiswa::where('nim', $sheet->getCell( 'B' . $row )->getValue())->first();
-                
-                $dataNilai[] = [
-                    'mahasiswa_id' => $mahasiswa->id,
-                    'IPK' =>$sheet->getCell( 'F' . $row )->getValue(),
-                    'SSKM' =>$sheet->getCell( 'G' . $row )->getValue(),
-                    'TOEFL' =>$sheet->getCell( 'H' . $row )->getValue(),
-                    'karya_tulis' =>$sheet->getCell( 'I' . $row )->getValue(),
-                ];
+            foreach ($row_range as $row) {
+                $mahasiswa = Mahasiswa::where('nim', $sheet->getCell('B' . $row)->getValue())->first();
+            
+                Nilai::updateOrCreate(
+                    ['mahasiswa_id' => $mahasiswa->id],
+                    [
+                        'IPK' => $sheet->getCell('H' . $row)->getValue(),
+                        'SSKM' => $sheet->getCell('I' . $row)->getValue(),
+                        'TOEFL' => $sheet->getCell('J' . $row)->getValue(),
+                        'karya_tulis' => $sheet->getCell('K' . $row)->getValue(),
+                    ]
+                );
             }
+            
             // Insert into Nilai table
-            Nilai::insert($dataNilai);
+            // Nilai::updateOrCreate($dataNilai);
             
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '23000') {
@@ -136,13 +140,13 @@ class MahasiswaController extends Controller
 
 
     public function getMahasiswaById($id){
-        // $data = Mahasiswa::find($id);
-        $nilaiMahasiswa = Nilai::join('mahasiswas', 'nilais.mahasiswa_id', '=', 'mahasiswas.id')
-                            ->select('nilais.*', 'mahasiswas.*')
-                            ->where('mahasiswas.id', $id)
-                            ->get();
+        $data = Mahasiswa::find($id);
+        // $nilaiMahasiswa = Nilai::join('mahasiswas', 'nilais.mahasiswa_id', '=', 'mahasiswas.id')
+        //                     ->select('nilais.*', 'mahasiswas.*')
+        //                     ->where('mahasiswas.id', $id)
+        //                     ->get();
 
-        return response()->json($nilaiMahasiswa);
+        return response()->json($data);
     }
 
 
@@ -150,17 +154,13 @@ class MahasiswaController extends Controller
 
     public function updateMahasiswa(Request $request, $id)
     {
-
-    
         $request->validate([
             'nim' => 'required|string|max:15',
             'nama' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'jurusan' => 'required', 
-            'ipk' => 'nullable|numeric', 
-            'sskm' => 'nullable|numeric',
-            'toefl' => 'nullable|numeric', 
-            'karya_tulis' => 'nullable|numeric', 
+            'jurusan' => 'required|string', 
+            'alamat' => 'nullable|string', 
+            'no_hp' => 'nullable|string',
         ]);
 
         // Ambil data mahasiswa dari database berdasarkan ID
@@ -175,22 +175,11 @@ class MahasiswaController extends Controller
         $mahasiswa->nama = $request->input('nama');
         $mahasiswa->email = $request->input('email');
         $mahasiswa->jurusan = $request->input('jurusan');
+        $mahasiswa->alamat = $request->input('alamat');
+        $mahasiswa->no_hp = $request->input('no_hp');
 
-
-        $nilai = Nilai::where('mahasiswa_id', $id)->first();
-
-        // if ($nilai) {
-            // Perbarui nilai atribut sesuai dengan data yang diterima melalui $request
-            $nilai->ipk = $request->input('ipk');
-            $nilai->toefl = $request->input('toefl');
-            $nilai->karya_tulis = $request->input('karya_tulis');
-            $nilai->sskm = $request->input('sskm');
-            // Perbarui kolom lainnya sesuai kebutuhan
-
-            // Simpan perubahan nilai ke database
-            $nilai->save();
-            $mahasiswa->save();
-        // }
+        $mahasiswa->save();
+    
 
         return response()->json(['message' => 'Data mahasiswa berhasil diperbarui']);
     }
