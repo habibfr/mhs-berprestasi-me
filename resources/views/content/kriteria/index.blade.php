@@ -54,8 +54,8 @@
 
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tabel /</span> Kriteria</h4>
 
-    {{-- <div id="your-alert-container"></div>
-
+    <div id="your-alert-container"></div>
+    {{-- 
     <div class="row">
         <div class="col">
             <div class="float-end mb-2">
@@ -160,7 +160,7 @@
 
                         <div class="row g-2">
                             <div class="col mb-3">
-                                <label for="bobot_kriteria" class="form-label">Bobot</label>
+                                <label for="bobot_kriteria" class="form-label">Bobot [1-10]</label>
                                 <input type="number" id="bobot_kriteria" class="form-control" placeholder="3"
                                     min="1" max="10">
                             </div>
@@ -168,7 +168,17 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="text-center" id="loading" style="display: none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div>
+                                <small>Sedang melakukan update...</small>
+                            </div>
+                        </div>
+
+                        <button type="button" id="btnModalClose" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-success" id="btnModalEditKriteria">Save changes</button>
                     </div>
                 </div>
@@ -213,7 +223,10 @@
 
                 $('#btnModalEditKriteria').click(function() {
                     // JavaScript
-                    // $("btnModalEditKriteria").attr("disabled", true);
+                    $("#loading").css("display", "block");
+                    $("#btnModalEditKriteria").remove();
+                    $("#btnModalClose").remove();
+
                     kriteriaId = $('#id_kriteria').val();
 
                     $.ajax({
@@ -230,6 +243,8 @@
                             'bobot': $('#bobot_kriteria').val(),
                         },
                         success: function(response) {
+                            // $("#loading").css("display", "none");
+
 
                             var alert = `
                                             <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
@@ -248,10 +263,9 @@
 
                             setTimeout(function() {
                                 window.location.reload()
-                            }, 1500);
+                            }, 1000);
                         },
                         error: function(error) {
-                            // Tanggapi error
                             console.error(error.message);
                             // Lakukan tindakan lainnya jika diperlukan
                         }

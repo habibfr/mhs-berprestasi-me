@@ -170,7 +170,16 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="text-center" id="loading" style="display: none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div>
+                                <small>Sedang melakukan update...</small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary" id="btnModalClose"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-success" id="btnModalEditNilai">Save changes</button>
                     </div>
                 </div>
@@ -226,7 +235,11 @@
 
                 $('#btnModalEditNilai').click(function() {
                     // JavaScript
-                    $("btnModalEditNilai").attr("disabled", true);
+                    $("#loading").css("display", "block");
+                    $("#btnModalEditNilai").attr("disabled", true);
+                    $("#btnModalEditNilai").remove();
+                    $("#btnModalClose").remove();
+
                     nilaiId = $('#id_nilai').val();
 
                     $.ajax({
@@ -249,6 +262,7 @@
                         },
                         success: function(response) {
                             // Tanggapi success
+                            // $("#loading").css("display", "none");
                             var alert = `
                                             <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
                                                 <div class="toast-header">

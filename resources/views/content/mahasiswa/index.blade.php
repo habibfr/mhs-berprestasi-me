@@ -56,6 +56,15 @@
 
     <div id="your-alert-container"></div>
 
+    <div class="text-center" id="loading" style="display: none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div>
+            <small>Sedang melakukan proses hitung...</small>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <div class="mb-3">
@@ -104,7 +113,8 @@
                                 </p>
                             @endif
                             <div class="input-group-append" id="button-addon2">
-                                <button class="btn btn-primary square" type="submit"><i class="ft-upload mr-1"></i>
+                                <button class="btn btn-primary square" id="btnUploadMhs" type="submit"><i
+                                        class="ft-upload mr-1"></i>
                                     Upload</button>
                             </div>
                         </div>
@@ -366,7 +376,7 @@
                         success: function(response) {
                             // $('#modalEditMhs').modal('hide');
                             $("#btnModalEditMhs").hide();
-           
+
                             // Tanggapi success
                             var alert = `
                                             <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
@@ -393,6 +403,10 @@
                             // Lakukan tindakan lainnya jika diperlukan
                         }
                     });
+                });
+
+                $('#btnUploadMhs').click(function() {
+                    $("#loading").css("display", "block");
                 })
 
 
