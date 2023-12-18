@@ -13,7 +13,7 @@
         <div class="row justify-content-center">
             <h3 class="col-md-2 text-center fw-medium"><a href="{{ route('mahasiswa') }}">Mahasiswa</a></h3>
             <h3 class="col-md-2 text-center fw-medium"><a href="{{ route('kriteria') }}">Kriteria</a></h3>
-            <h3 class="col-md-2 text-center fw-medium"><a href="{{ route('peringkat') }}">Peringkat</a></h3>
+            <h3 class="col-md-2 text-center fw-medium"><a href="{{ route('ranking') }}">Peringkat</a></h3>
         </div>
     </div>
 </nav>
