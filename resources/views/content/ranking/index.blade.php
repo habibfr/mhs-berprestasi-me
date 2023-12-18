@@ -52,7 +52,7 @@
         </div>
     @endif
 
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tabel /</span> Kriteria</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tabel /</span> Ranking</h4>
 
     <div id="your-alert-container"></div>
 
@@ -185,7 +185,6 @@
             $('#btnProsesHitung').click(function() {
                 $("#loading").css("display", "block");
             })
-
         </script>
     @endpush
 
