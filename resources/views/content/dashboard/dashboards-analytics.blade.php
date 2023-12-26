@@ -24,9 +24,9 @@
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
                                 <div class=" d-flex align-items-center justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                        <img src="http://127.0.0.1:8000/assets/img/icons/unicons/chart-success.png"
-                                            alt="chart success" class="rounded">
+
+                                    <div class=" flex-shrink-0 badge badge-center rounded-pill bg-label-info">
+                                        <i class='bx bx-male-female bx-md'></i>
                                     </div>
                                     <span class="fw-semibold d-block mx-3">Jumlah Mahasiswa</span>
                                 </div>
@@ -41,9 +41,9 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <h3 class="card-title mb-2 ">30</h3>
-                                <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                    +72.80%</small>
+                                <h3 class="card-title my-4 mw-75 mh-75">{{ $data['total_mhs'] ?? 0 }}</h3>
+                                {{-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
+                                    +72.80%</small> --}}
                             </div>
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
                                 <div class=" d-flex align-items-center justify-content-between">
-                                    <div class=" flex-shrink-0 badge badge-center rounded-pill bg-label-info">
-                                        <i class="bx bx-down-arrow-alt"></i>
+                                    <div class=" flex-shrink-0 badge badge-center rounded-pill bg-label-warning">
+                                        <i class='bx bx-list-ol bx-md'></i>
                                     </div>
                                     <span class="fw-semibold d-block mx-3">Jumlah Kriteria</span>
                                 </div>
@@ -79,9 +79,8 @@
                                 </div>
                             </div>
                             <div class="text-center">
-
-                                <h3 class="card-title text-nowrap mb-2">4</h3>
-                                <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                <h3 class="card-title text-nowrap my-4 mw-75 mh-75">{{ $data['total_kriteria'] ?? 0 }}</h3>
+                                {{-- <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -14.82%</small> --}}
                             </div>
                         </div>
                     </div>
@@ -91,9 +90,9 @@
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
                                 <div class=" d-flex align-items-center justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                        <img src="http://127.0.0.1:8000/assets/img/icons/unicons/cc-primary.png"
-                                            alt="Credit Card" class="rounded">
+
+                                    <div class=" flex-shrink-0 badge badge-center rounded-pill bg-label-success">
+                                        <i class='bx bxs-upvote bx-md'></i>
                                     </div>
                                     <span class="fw-semibold d-block mx-3">Mahasiswa Terbaik</span>
                                 </div>
@@ -111,16 +110,15 @@
                                 </div>
                             </div>
                             <div class="text-center">
-
-                                <h3 class="card-title mb-2">0.86</h3>
-                                <div class="text-info fw-semibold">Budiono
-                                    Siregar</div>
+                                <h3 class="card-title my-3 mw-75 mh-75">{{ $data['mahasiswa_terbaik'] ?? '' }}</h3>
+                                {{-- <div class="text-info fw-semibold">Budiono
+                                    Siregar</div> --}}
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- </div>
-                                                                                                                                                                                                      <div class="row"> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                              <div class="row"> -->
 
             </div>
         </div>
@@ -130,9 +128,9 @@
         <div class="col-md-6 col-xl-4 order-0 mb-4">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
-                    <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Order Statistics</h5>
-                        <small class="text-muted">42.82k Total Sales</small>
+                    <div class="card-title mb-4">
+                        <h5 class="m-0 me-2">Asal Mahasiswa</h5>
+                        {{-- <small class="text-muted">42.82k Total Sales</small> --}}
                     </div>
                     <div class="dropdown">
                         <button class="btn p-0" type="button" id="orederStatistics" data-bs-toggle="dropdown"
@@ -140,22 +138,21 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                            <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Share</a>
+                            <a class="dropdown-item" href="{{ route('mahasiswa') }}">View More</a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3" style="position: relative;">
-                        <div class="d-flex flex-column align-items-center gap-1">
+                        {{-- <div class="d-flex flex-column align-items-center gap-1">
                             <h2 class="mb-2">8,258</h2>
                             <span>Total Orders</span>
-                        </div>
-                        <div id="orderStatisticsChart" style="min-height: 137.55px;">
+                        </div> --}}
+                        {{-- <div id="orderStatisticsChart" style="min-height: 137.55px;">
                             <div id="apexchartsarsaq32i"
                                 class="apexcharts-canvas apexchartsarsaq32i apexcharts-theme-light"
-                                style="width: 130px; height: 137.55px;"><svg id="SvgjsSvg4273" width="130"
+                                style="width: 130px; height: 137.55px;">
+                                <svg id="SvgjsSvg4273" width="130"
                                     height="137.55" xmlns="http://www.w3.org/2000/svg" version="1.1"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev"
                                     class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)"
@@ -323,7 +320,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
+
+
                         <div class="resize-triggers">
                             <div class="expand-trigger">
                                 <div style="width: 407px; height: 139px;"></div>
@@ -332,64 +331,26 @@
                         </div>
                     </div>
                     <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-primary"><i
-                                        class="bx bx-mobile-alt"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Electronic</h6>
-                                    <small class="text-muted">Mobile, Earbuds, TV</small>
+
+                        @forelse ($data['asal_mahasiswa'] as $jurusan => $jumlah)
+                            <li class="d-flex mb-4 pb-1">
+                                <div class="avatar flex-shrink-0 me-3">
+                                    <span class="avatar-initial rounded bg-label-info"><i
+                                            class="bx bx-mobile-alt"></i></span>
                                 </div>
-                                <div class="user-progress">
-                                    <small class="fw-medium">82.5k</small>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                    <div class="me-2">
+                                        <h6 class="mb-0">{{ $jurusan ?? '' }}</h6>
+                                        {{-- <small class="text-muted">Mobile, Earbuds, TV</small> --}}
+                                    </div>
+                                    <div class="user-progress">
+                                        <h6 class="fw-medium">{{ $jumlah ?? 0 }}</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-success"><i class="bx bx-closet"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Fashion</h6>
-                                    <small class="text-muted">T-shirt, Jeans, Shoes</small>
-                                </div>
-                                <div class="user-progress">
-                                    <small class="fw-medium">23.8k</small>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-info"><i class="bx bx-home-alt"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Decor</h6>
-                                    <small class="text-muted">Fine Art, Dining</small>
-                                </div>
-                                <div class="user-progress">
-                                    <small class="fw-medium">849k</small>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-secondary"><i
-                                        class="bx bx-football"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Sports</h6>
-                                    <small class="text-muted">Football, Cricket Kit</small>
-                                </div>
-                                <div class="user-progress">
-                                    <small class="fw-medium">99</small>
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        @empty
+                            <div class="text-center"> data masih kosong</div>
+                        @endforelse
                     </ul>
                 </div>
             </div>
@@ -858,111 +819,40 @@
         <div class="col-md-6 col-lg-4 order-2 mb-4">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Transactions</h5>
+                    <h5 class="card-title m-0 me-2">Top Mahasiswa</h5>
                     <div class="dropdown">
                         <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="bx bx-dots-vertical-rounded"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                            <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
+                            <a class="dropdown-item" href="{{ route('ranking') }}">View More</a>
+                            {{-- <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Year</a> --}}
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="http://127.0.0.1:8000/assets/img/icons/unicons/paypal.png" alt="User"
-                                    class="rounded">
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="text-muted d-block mb-1">Paypal</small>
-                                    <h6 class="mb-0">Send money</h6>
+
+                        @forelse ($data['mahasiswas'] as $nama => $skor)
+                            <li class="d-flex mb-4 pb-1">
+                                <div class="avatar flex-shrink-0 me-3">
+                                    <img src="http://127.0.0.1:8000/assets/img/icons/unicons/paypal.png" alt="User"
+                                        class="rounded">
                                 </div>
-                                <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                    <div class="me-2">
+                                        <h6 class="mb-0">{{ $nama ?? '' }}</h6>
+                                        {{-- <small class="text-muted d-block mb-1">Paypal</small> --}}
+                                    </div>
+                                    <div class="user-progress d-flex align-items-center gap-1">
+                                        <h6 class="mb-0">{{ $skor ?? '' }}</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="http://127.0.0.1:8000/assets/img/icons/unicons/wallet.png" alt="User"
-                                    class="rounded">
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="text-muted d-block mb-1">Wallet</small>
-                                    <h6 class="mb-0">Mac'D</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">+270.69</h6> <span class="text-muted">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="http://127.0.0.1:8000/assets/img/icons/unicons/chart.png" alt="User"
-                                    class="rounded">
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="text-muted d-block mb-1">Transfer</small>
-                                    <h6 class="mb-0">Refund</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">+637.91</h6> <span class="text-muted">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="http://127.0.0.1:8000/assets/img/icons/unicons/cc-success.png" alt="User"
-                                    class="rounded">
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="text-muted d-block mb-1">Credit Card</small>
-                                    <h6 class="mb-0">Ordered Food</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">-838.71</h6> <span class="text-muted">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="http://127.0.0.1:8000/assets/img/icons/unicons/wallet.png" alt="User"
-                                    class="rounded">
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="text-muted d-block mb-1">Wallet</small>
-                                    <h6 class="mb-0">Starbucks</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">+203.33</h6> <span class="text-muted">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="http://127.0.0.1:8000/assets/img/icons/unicons/cc-warning.png" alt="User"
-                                    class="rounded">
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="text-muted d-block mb-1">Mastercard</small>
-                                    <h6 class="mb-0">Ordered Food</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">-92.45</h6> <span class="text-muted">USD</span>
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        @empty
+                        @endforelse
                     </ul>
                 </div>
             </div>
