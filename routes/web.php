@@ -67,7 +67,12 @@ Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('for
 Route::group(['prefix' => 'admin', 'as' => '', 'middleware' => 'auth'], function(){
   // Main Page Route
   Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard');
+  Route::get('/dashboard/kriteria', [Analytics::class, 'kriteriaDashboard'])->name('kriteria_dashboard');
+
+  // logout
   Route::get('/logout', [LoginBasic::class, 'logout'])->name('logout');
+
+  
 
   // layout
   Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');

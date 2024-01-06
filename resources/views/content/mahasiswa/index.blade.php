@@ -330,7 +330,7 @@
 
                     // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
                     $.ajax({
-                        url: '/mahasiswa/get-mahasiswa/' + mahasiswaId,
+                        url: '/admin/mahasiswa/get-mahasiswa/' + mahasiswaId,
                         method: 'GET',
                         dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
                         success: function(data) {
@@ -363,7 +363,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: `/mahasiswa/update-mahasiswa/${mahasiswaId}`,
+                        url: `/admin/mahasiswa/update-mahasiswa/${mahasiswaId}`,
                         data: {
                             '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
                             'nim': $('#nim_mhs').val(),
@@ -418,7 +418,7 @@
                     // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
                     $('#confirmHapus').click(function() {
                         $.ajax({
-                            url: '/mahasiswa/delete/' + mahasiswaId,
+                            url: '/admin/mahasiswa/delete/' + mahasiswaId,
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },

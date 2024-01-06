@@ -202,7 +202,7 @@
                     var kriteriaId = $(this).data('id');
                     // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
                     $.ajax({
-                        url: '/kriteria/get-kriteria/' + kriteriaId,
+                        url: '/admin/kriteria/get-kriteria/' + kriteriaId,
                         method: 'GET',
                         dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
                         success: function(data) {
@@ -236,7 +236,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 
                         },
-                        url: `/kriteria/update-kriteria/${kriteriaId}`,
+                        url: `/admin/kriteria/update-kriteria/${kriteriaId}`,
                         data: {
                             '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
                             'atribut': $('#atribut_kriteria').val(),

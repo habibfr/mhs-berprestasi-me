@@ -206,7 +206,7 @@
 
                     // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
                     $.ajax({
-                        url: '/nilai/get-nilai/' + mhsId,
+                        url: '/admin/nilai/get-nilai/' + mhsId,
                         method: 'GET',
                         dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
                         success: function(data) {
@@ -249,7 +249,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 
                         },
-                        url: `/nilai/update-nilai/${nilaiId}`,
+                        url: `/admin/nilai/update-nilai/${nilaiId}`,
                         data: {
                             '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
                             'nim': $('#nim_nilai').val(),
