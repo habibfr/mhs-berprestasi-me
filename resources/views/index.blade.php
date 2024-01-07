@@ -226,7 +226,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
                             <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#daftar">Daftar</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('pages-misc-error') }}">Daftar</a></li>
                             <li class="nav-item"><a class="nav-link" href="#pemenang">Pemenang</a></li>
                             <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login as Admin</a></li>
@@ -250,9 +250,9 @@
                                 <div
                                     class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
                                     <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder"
-                                        href="resume.html">Daftar</a>
+                                        href="{{ route('pages-misc-error') }}">Daftar</a>
                                     <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder"
-                                        href="projects.html">Pemenang</a>
+                                        href="#pemenang">Pemenang</a>
                                 </div>
                             </div>
                         </div>
@@ -554,6 +554,72 @@
                     </div>
                 </div>
             </header>
+
+
+            <div class="col-md-6 col-lg-12 mb-3 mx-auto" id="pemenang">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h2 class="display-5 fw-bolder"><span class="text-gradient d-inline">Mahasiswa Terbaik</span>
+                            </h2>
+                            <h6 class="card-subtitle text-muted">Stay humble and learn :D</h6>
+                        </div>
+
+                        <div class="table-responsive text-nowrap m-4">
+                            <table id="tabelMahasiswa" class="table table-striped dataTable" style="width: 100%;"
+                                aria-describedby="tabelMahasiswa_info">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th class="sorting sorting_asc text-center" tabindex="0"
+                                            aria-controls="tabelMahasiswa" aria-sort="ascending"
+                                            aria-label="No: activate to sort column descending" style="width: 0px;">No
+                                        </th>
+                                        <th class="sorting text-center" tabindex="0" aria-controls="tabelMahasiswa"
+                                            colspan="1" aria-label="NIM: activate to sort column ascending"
+                                            style="width: 66px;">NIM
+                                        </th>
+                                        <th class="sorting text-center" tabindex="0" aria-controls="tabelMahasiswa"
+                                            colspan="1" aria-label="Nama: activate to sort column ascending"
+                                            style="width: 132px;">
+                                            Nama</th>
+
+                                        <th class="sorting text-center" tabindex="0" aria-controls="tabelMahasiswa"
+                                            colspan="1" aria-label="SSKM: activate to sort column ascending"
+                                            style="width: 55px;">Skor
+                                        </th>
+                                        <th class="sorting sorting_asc text-center" tabindex="0"
+                                            aria-controls="tabelMahasiswa" aria-sort="ascending"
+                                            aria-label="No: activate to sort column descending" style="width: 0px;">
+                                            Ranking
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($data as $key => $ranking)
+                                        {{-- @dd($mahasiswa->nilai->IPK) --}}
+                                        <tr>
+                                            <td class="text-center">{{ ++$key }}</td>
+                                            <td class="text-center">{{ $ranking->nim ?? '' }}</td>
+                                            <td class="text-center">{{ $ranking->nama ?? '' }}</td>
+                                            <td class="text-center">{{ number_format($ranking->skor * 100, 2) ?? 0 }}</td>
+                                            <td class="text-center">{{ $key ?? 0 }}</td>
+                                        </tr>
+                                    @empty
+                                        <p>Maaf data masih kosong!</p>
+                                    @endforelse
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        <small class="card-text text-success">*Be your self and never surender!</small>
+
+                    </div>
+                </div>
+            </div>
+
+
             <!-- About Section-->
             <section class="bg-light py-5">
                 <div class="container px-5" id="about">
@@ -597,6 +663,16 @@
 
 
     @push('pricing-script')
+        <script>
+            $(document).ready(function() {
+                $('#tabelMahasiswa').DataTable({
+                    pageLength: 10,
+                    lengthMenu: [3, 5, 10, 20],
+                    pagingType: 'full_numbers',
+                });
+
+            });
+        </script>
     @endpush
 
 
