@@ -13,16 +13,38 @@
       "url": "admin/mahasiswa"
     },
     {
-      "name": "Nilai",
+      "name": "Nilais",
       "icon": "menu-icon tf-icons bx bx-bitcoin",
-      "slug": "nilai",
-      "url": "admin/nilai"
+      "slug": "nilais",
+      "submenu": [
+        {
+          "name": "Nilai",
+          "slug": "nilais-nilai",
+          "url": "admin/nilais/nilai"
+        },
+        {
+          "name": "Nilai Karya Tulis",
+          "url": "admin/nilais/nilai-karya-tulis",
+          "slug": "nilais-nilai-karya-tulis"
+        }
+      ]
     },
     {
-      "name": "Kriteria",
+      "name": "Kriterias",
       "icon": "menu-icon tf-icons bx bx-list-ul",
-      "slug": "kriteria",
-      "url": "admin/kriteria"
+      "slug": "kriterias",
+      "submenu": [
+        {
+          "name": "Kriteria",
+          "slug": "kriterias-kriteria",
+          "url": "admin/kriterias/kriteria"
+        },
+        {
+          "url": "admin/kriterias/klasifikasi-karya-tulis",
+          "name": "Klasifikasi Karya Tulis",
+          "slug": "kriterias-klasifikasi-karya-tulis"
+        }
+      ]
     },
     {
       "name": "Ranking",
@@ -38,6 +60,39 @@
     },
     {
       "menuHeader": ""
+    },
+    {
+      "name": "Layouts",
+      "icon": "menu-icon tf-icons bx bx-layout",
+      "slug": "layouts",
+      "submenu": [
+        {
+          "url": "layouts/without-menu",
+          "name": "Without menu",
+          "slug": "layouts-without-menu"
+        },
+        {
+          "url": "layouts/without-navbar",
+          "name": "Without navbar",
+          "slug": "layouts-without-navbar"
+        },
+        {
+          "url": "layouts/container",
+          "name": "Container",
+          "slug": "layouts-container"
+        },
+        {
+          "url": "layouts/fluid",
+          "name": "Fluid",
+          "slug": "layouts-fluid"
+        },
+        {
+          "url": "layouts/blank",
+          "name": "Blank",
+          "slug": "layouts-blank",
+          "target": "_blank"
+        }
+      ]
     }
   ]
 }
