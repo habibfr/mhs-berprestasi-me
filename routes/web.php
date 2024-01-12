@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\KaryaTulisController;
+use App\Http\Controllers\KlasifikasiKaryaTulisController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\RankingController;
@@ -95,15 +97,17 @@ Route::group(['prefix' => 'admin', 'as' => '', 'middleware' => 'auth'], function
 
 
   // Route for Nilai
-  Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai');
-
+  Route::get('/nilais/nilai', [NilaiController::class, 'index'])->name('nilais-nilai');
+  
   // get nilai by id
   Route::get('/nilai/get-nilai/{id}', [NilaiController::class, 'getNilaiByMhsId']);
-
-
+  
+  
   // update mahasiswa by id
   Route::post('/nilai/update-nilai/{id}', [NilaiController::class, 'updateNilai']);
-
+  
+  // nilai karya tulis
+  Route::get('/nilais/nilai-karya-tulis', [KaryaTulisController::class, 'nilai_karya_tulis'])->name('nilais-nilai-karya-tulis');
 
   // Route for Peringkat
   // Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peringkat');
@@ -113,14 +117,17 @@ Route::group(['prefix' => 'admin', 'as' => '', 'middleware' => 'auth'], function
   //         ->name('peringkat');
 
   // Route for Kriteria
-  Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria');
-
+  Route::get('/kriterias/kriteria', [KriteriaController::class, 'index'])->name('kriterias-kriteria');
+  
   // get kriteria by id
   Route::get('/kriteria/get-kriteria/{id}', [KriteriaController::class, 'getKriteriaById']);
-
+  
   // update mahasiswa by id
   Route::post('/kriteria/update-kriteria/{id}', [KriteriaController::class, 'updateKriteria']);
+  
 
+  // klasifikasi karya tulis
+  Route::get('/kriterias/klasifikasi-karya-tulis', [KlasifikasiKaryaTulisController::class, 'klasifikasi_karya_tulis'])->name('kriterias-klasifikasi-karya-tulis');
 
 
 
