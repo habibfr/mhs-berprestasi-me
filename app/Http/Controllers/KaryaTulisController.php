@@ -11,6 +11,7 @@ class KaryaTulisController extends Controller
 
         $data = KaryaTulis::all();
 
+        // dd($data);
         return view('content.nilai.nilai_karya_tulis', compact('data'));
     }
 }
