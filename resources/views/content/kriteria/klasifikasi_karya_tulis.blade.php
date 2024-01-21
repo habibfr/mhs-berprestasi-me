@@ -19,7 +19,7 @@
 
 @section('content')
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col">
             <div class="float-start mb-3">
                 <div class="input-group-append">
@@ -41,7 +41,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
+    <div id="your-alert-container"></div>
 
     <div class="card">
         <div class="table-responsive text-nowrap m-4">
@@ -118,45 +119,37 @@
                                 <input type="number" id="id_klasifikasi_kt" class="form-control" placeholder="0" readonly
                                     disabled>
                             </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="klasifikasi_kt_klasifikasi_kt" class="form-label">klasifikasi_kt</label>
-                                <input type="text" id="klasifikasi_kt_klasifikasi_kt" class="form-control"
-                                    placeholder="IPK" required disabled>
-                            </div>
-                        </div>
-
-                        <div class="row g-2">
-
-                            <div class="col mb-3">
-                                <label for="atribut_klasifikasi_kt" class="form-label">Atribut</label>
-                                <select id="atribut_klasifikasi_kt" class="form-select" name="atribut_klasifikasi_kt"
-                                    required>
-                                    <option>Pilih Atribut</option>
-                                    <option value="benefit">Benefit</option>
-                                    <option value="cost">Cost</option>
-
-                                </select>
-                            </div>
                         </div>
 
                         <div class="row g-2">
                             <div class="col mb-3">
-                                <label for="bobot_klasifikasi_kt" class="form-label">Bobot [1-10]</label>
-                                <input type="number" id="bobot_klasifikasi_kt" class="form-control" placeholder="3"
-                                    min="1" max="10">
+                                <label for="kriteria_klasifikasi_kt" class="form-label">Kriteria</label>
+                                <input type="text" id="kriteria_klasifikasi_kt" class="form-control"
+                                    placeholder="Karya Tulis" disabled readonly>
                             </div>
 
                             <div class="col mb-3">
                                 <label for="periode_klasifikasi_kt" class="form-label">Periode</label>
-                                <input type="number" id="periode_klasifikasi_kt" class="form-control"
-                                    placeholder="2023">
+                                <input type="number" id="periode_klasifikasi_kt" class="form-control" placeholder="2023"
+                                    disabled readonly>
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="klasifikasi_klasifikasi_kt" class="form-label">Klasifikasi</label>
+                                <input type="text" id="klasifikasi_klasifikasi_kt" class="form-control"
+                                    placeholder="IPK" required disabled>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nilai_klasifikasi_kt" class="form-label">Nilai</label>
+                                <input type="number" min="0" max="10" id="nilai_klasifikasi_kt"
+                                    class="form-control" placeholder="0.8" step="0.1">
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="text-center" id="loading" style="display: none">
@@ -170,7 +163,7 @@
 
                         <button type="button" id="btnModalClose" class="btn btn-outline-secondary"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success" id="btnModalEditklasifikasi_kt">Save
+                        <button type="button" class="btn btn-success" id="btnModalEditKlasifikasi">Save
                             changes</button>
                     </div>
                 </div>
@@ -194,6 +187,83 @@
                     pageLength: 5,
                     lengthMenu: [3, 5, 10, 20],
                     pagingType: 'full_numbers',
+                });
+
+
+
+                // Ketika tombol edit diklik
+                $('.btnEdit').click(function() {
+                    // Ambil data-id dari tombol edit mahasiswa
+                    var klasifikasiId = $(this).data('id');
+                    // console.log(klasifikasiId);
+
+                    // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
+                    $.ajax({
+                        url: '/admin/kriterias/get-klasifikasi/' + klasifikasiId,
+                        method: 'GET',
+                        dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
+                        success: function(data) {
+                            // console.log(data);
+                            // Update konten modal dengan data yang diterima
+                            $('#id_klasifikasi_kt').val(data[0].id);
+                            $('#kriteria_klasifikasi_kt').val(data[0].kriteria);
+                            $('#periode_klasifikasi_kt').val(data[0].periode);
+                            $('#klasifikasi_klasifikasi_kt').val(data[0].klasifikasi);
+                            $('#nilai_klasifikasi_kt').val(data[0].nilai);
+
+                        },
+                        error: function() {
+                            console.log('Gagal mengambil data mahasiswa.');
+                        }
+                    });
+                });
+
+
+                $('#btnModalEditKlasifikasi').click(function() {
+                    // JavaScript
+                    $("btnModalEditKlasifikasi").attr("disabled", true);
+                    klasifikasiId = $('#id_klasifikasi_kt').val();
+
+                    $.ajax({
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: `/admin/kriterias/update-klasifikasi/${klasifikasiId}`,
+                        data: {
+                            '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
+                            'nilai': $('#nilai_klasifikasi_kt').val(),
+                        },
+                        success: function(response) {
+                            // $('#modalEditMhs').modal('hide');
+                            $("#btnModalEditKlasifikasi").hide();
+
+                            // Tanggapi success
+                            var alert = `
+                                    <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+                                        <div class="toast-header">
+                                            <i class="bx bx-bell me-2"></i>
+                                            <div class="me-auto fw-medium">Briliant</div>
+                                            <small>1 seconds ago</small>
+                                        </div>
+                                        <div class="toast-body">
+                                            ${response.message}
+                                        </div>
+                                    </div>
+                                `;
+
+                            $('#your-alert-container').html(alert);
+
+                            setTimeout(function() {
+                                window.location.reload()
+                            }, 1500);
+                        },
+                        error: function(error) {
+                            // Tanggapi error
+                            console.error(error.message);
+                            // Lakukan tindakan lainnya jika diperlukan
+                        }
+                    });
                 });
             });
         </script>
