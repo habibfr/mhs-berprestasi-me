@@ -177,7 +177,7 @@
                                     <span data-id="{{ $mahasiswa->id }}" class="text-danger btnHapus"
                                         data-bs-toggle="modal" data-bs-target="#modalHapusMhs"><i
                                             class="bx bx-trash bx-sm me-2"></i>
-                                        </a>
+                                    </span>
                                 </div>
                             </td>
                         </tr>

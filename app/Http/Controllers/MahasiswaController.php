@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KaryaTulis;
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa\Nilai;
 use App\Models\Mahasisawa\Mahasiswa;
@@ -60,18 +61,74 @@ class MahasiswaController extends Controller
 
             foreach ($row_range as $row) {
                 $mahasiswa = Mahasiswa::where('nim', $sheet->getCell('B' . $row)->getValue())->first();
-            
-                Nilai::updateOrCreate(
-                    ['mahasiswa_id' => $mahasiswa->id],
-                    [
-                        'IPK' => $sheet->getCell('H' . $row)->getValue(),
-                        'SSKM' => $sheet->getCell('I' . $row)->getValue(),
-                        'TOEFL' => $sheet->getCell('J' . $row)->getValue(),
-                        'karya_tulis' => $sheet->getCell('K' . $row)->getValue(),
-                    ]
-                );
+                
+
+                $nilai_ipk = Nilai::firstOrNew(['mahasiswa_id' => $mahasiswa->id, 'kriteria_id' => 1]);
+                $nilai_ipk->nilai = $sheet->getCell('H' . $row)->getValue();
+                $nilai_ipk->save();
+
+                $nilai_sskm = Nilai::firstOrNew(['mahasiswa_id' => $mahasiswa->id, 'kriteria_id' => 2]); 
+                $nilai_sskm->nilai = $sheet->getCell('I' . $row)->getValue();
+                $nilai_sskm->save();
+
+                $nilai_toefl = Nilai::firstOrNew(['mahasiswa_id' => $mahasiswa->id, 'kriteria_id' => 3]);
+                $nilai_toefl->nilai =  $sheet->getCell('J' . $row)->getValue();
+                $nilai_toefl->save();
+                
+                $nilai_kt = Nilai::firstOrNew(['mahasiswa_id' => $mahasiswa->id, 'kriteria_id' => 4]);
+                $nilai_kt->nilai =  0;
+                $nilai_kt->save();
+
+
+                // Nilai::updateOrCreate(
+                //     ['mahasiswa_id' => $mahasiswa->id],
+                //     [
+                //         'kriteria_id' => 1,
+                //         'nilai' => $sheet->getCell('H' . $row)->getValue(),
+
+                //         'kriteria_id' => 2,
+                //         'nilai' => $sheet->getCell('I' . $row)->getValue(),
+
+                //         'kriteria_id' => 3,
+                //         'nilai' => $sheet->getCell('J' . $row)->getValue(),
+                //     ]
+                // );
+            }
+
+            foreach ($row_range as $row) {
+                $mahasiswa = Mahasiswa::where('nim', $sheet->getCell('B' . $row)->getValue())->first();
+                
+
+                $nilai_kt_nas = KaryaTulis::firstOrNew(['mahasiswa_id' => $mahasiswa->id, 'kriteria_id' => 4,  'klasifikasi_karya_tulis_id' => 2]);
+                $nilai_kt_nas->jumlah = $sheet->getCell('K' . $row)->getValue();
+                $nilai_kt_nas->save();
+
+                $nilai_kt_inter = KaryaTulis::firstOrNew(['mahasiswa_id' => $mahasiswa->id, 'kriteria_id' => 4, 'klasifikasi_karya_tulis_id' => 3]);
+                $nilai_kt_inter->jumlah = $sheet->getCell('L' . $row)->getValue();
+                $nilai_kt_inter->save();
+
+                // KaryaTulis::updateOrCreate(
+                //     ['mahasiswa_id' => $mahasiswa->id],
+                //     [
+                //         'kriteria_id' => 4,
+                //         'klasifikasi_karya_tulis_id' => 2,
+                //         'jumlah' => $sheet->getCell('K' . $row)->getValue(),
+                //     ],
+                //     [
+                //         'kriteria_id' => 4,
+                //         'klasifikasi_karya_tulis_id' => 3,
+                //         'jumlah' => $sheet->getCell('L' . $row)->getValue(),
+                //     ],
+                // );
             }
             
+
+            // [
+            //     'IPK' => $sheet->getCell('H' . $row)->getValue(),
+            //     'SSKM' => $sheet->getCell('I' . $row)->getValue(),
+            //     'TOEFL' => $sheet->getCell('J' . $row)->getValue(),
+            //     'karya_tulis' => $sheet->getCell('K' . $row)->getValue(),
+            // ]
             // Insert into Nilai table
             // Nilai::updateOrCreate($dataNilai);
             
