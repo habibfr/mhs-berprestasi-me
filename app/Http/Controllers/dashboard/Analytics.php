@@ -25,27 +25,47 @@ class Analytics extends Controller
 
     $data = $this->transformArray($all_datas);
 
+    // dd($all_datas);
     // dd($data);
-    
-
 
     return view('content.dashboard.dashboards-analytics', compact('data'));
   }
 
 
+ 
+
     
   function transformArray($data)
   {
       $result = [
-          'total_mhs' => count($data),
-          'total_kriteria' => 4, // Asumsi bahwa setiap array dalam $data memiliki struktur yang sama
-          'mahasiswa_terbaik' => $this->getMaxSkorMahasiswa($data)['nama'],
+          'total_mhs' => $this->countMahasiswa($data),
+          'total_kriteria' => count(Kriteria::all()), // Asumsi bahwa setiap array dalam $data memiliki struktur yang sama
+          'mahasiswa_terbaik' => $this->getMaxSkorMahasiswa($data)['nama'] ?? 'Belum Ada',
           'asal_mahasiswa' => $this->countByJurusan($data),
           'mahasiswas' => $this->mahasiswaBySkor($data)
       ];
 
+      // dd($result);
+
       return $result;
   }
+
+  function countMahasiswa($data){
+    $mahasiswas = [];
+
+    foreach ($data as $mahasiswa) {
+      $id = $mahasiswa['mahasiswa_id'];
+      
+      if (!isset($mahasiswas[$id])) {
+          $mahasiswas[$id] = 0;
+      }
+      
+      $mahasiswas[$id]++; 
+    }
+  
+    return count($mahasiswas);
+  }
+
 
   function getMaxSkorMahasiswa($data)
   {
@@ -64,33 +84,66 @@ class Analytics extends Controller
 
   function countByJurusan($data)
   {
-      $jurusanCount = [];
+    $jurusans = [];
 
-      foreach ($data as $mahasiswa) {
-          $jurusan = $mahasiswa['jurusan'];
-
-          if (isset($jurusanCount[$jurusan])) {
-              $jurusanCount[$jurusan]++;
-          } else {
-              $jurusanCount[$jurusan] = 1;
-          }
+    foreach ($data as $mahasiswa) {   
+      $id = $mahasiswa['mahasiswa_id'];
+      $jurusan = $mahasiswa['jurusan'];  
+      
+      if (!isset($jurusans[$jurusan])) {
+        $jurusans[$jurusan] = [];
       }
 
-      return $jurusanCount;
+      if (!in_array($id, $jurusans[$jurusan])) { 
+        $jurusans[$jurusan][] = $id;
+      }  
+    }
+
+    $result = [];
+
+    foreach ($jurusans as $jurusan => $ids) {
+      $total = count($ids);
+      
+      $result[] = [
+        'jurusan' => $jurusan,
+        'total_mahasiswa' => $total
+      ];
+    }
+
+    return $result;
   }
 
   function mahasiswaBySkor($data){
     $mahasiswas = [];
-    $i = 1;
 
     foreach ($data as $mahasiswa) {
-      if($i <= 5){
-        $mahasiswas[$mahasiswa->nama] = $mahasiswa->skor;
+      $id = $mahasiswa['mahasiswa_id'];
+      $skor = $mahasiswa['skor'];
+      
+      if (!isset($mahasiswas[$id])) {
+        $mahasiswas[$id] = [
+          'nama' => $mahasiswa['nama'],
+          'skor' => $skor  
+        ];
+      } else {
+        if ($skor > $mahasiswas[$id]['skor']) {
+          $mahasiswas[$id]['skor'] = $skor;  
+        }
       }
-      $i++;
+    }
+    
+    usort($mahasiswas, function($a, $b) {
+      return $b['skor'] <=> $a['skor'];
+    });
+    
+    $result = array_values($mahasiswas);
+    
+    if (count($result) > 5) {
+      $result = array_slice($result, 0, 5);
     }
 
-  return $mahasiswas;
+    // dd($result);
+    return $result;
   }
 
   // Penggunaan fungsi transformArray
@@ -108,7 +161,6 @@ class Analytics extends Controller
       $kriteria['bobot'] = $value->bobot;
 
       array_push($data, $kriteria);
-    
     }
 
     return response()->json($data);

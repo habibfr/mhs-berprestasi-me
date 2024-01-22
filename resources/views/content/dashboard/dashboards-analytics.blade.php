@@ -74,7 +74,7 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                        <a class="dropdown-item" href="{{ route('kriteria') }}">View More</a>
+                                        <a class="dropdown-item" href="{{ route('kriterias-kriteria') }}">View More</a>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
                 <!-- </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <div class="row"> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <div class="row"> -->
 
             </div>
         </div>
@@ -331,18 +331,18 @@
                     </div>
                     <ul class="p-0 m-0">
 
-                        @forelse ($data['asal_mahasiswa'] as $jurusan => $jumlah)
+                        @forelse ($data['asal_mahasiswa'] as $jurusan)
                             <li class="d-flex mb-4 pb-1">
                                 <div class=" flex-shrink-0 badge badge-center rounded-pill bg-label-info">
                                     <i class='bx bx-purchase-tag'></i>
                                 </div>
                                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                     <div class="me-2 mx-2">
-                                        <h6 class="mb-0">{{ $jurusan ?? '' }}</h6>
+                                        <h6 class="mb-0">{{ $jurusan['jurusan'] ?? '' }}</h6>
                                         {{-- <small class="text-muted">Mobile, Earbuds, TV</small> --}}
                                     </div>
                                     <div class="user-progress">
-                                        <h6 class="fw-medium mb-0">{{ $jumlah ?? 0 }}</h6>
+                                        <h6 class="fw-medium mb-0">{{ $jurusan['total_mahasiswa'] ?? 0 }}</h6>
                                     </div>
                                 </div>
                             </li>
@@ -366,7 +366,7 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                            <a class="dropdown-item" href="{{ route('kriteria') }}">View More</a>
+                            <a class="dropdown-item" href="{{ route('kriterias-kriteria') }}">View More</a>
                             {{-- <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
                             <a class="dropdown-item" href="javascript:void(0);">Last Year</a> --}}
                         </div>
@@ -376,7 +376,7 @@
                     <div class="tab-content p-0">
                         <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel"
                             style="position: relative;">
-                            <div class="d-flex p-4 pt-3">
+                            {{-- <div class="d-flex p-4 pt-3"> --}}
                                 {{-- <div class="avatar flex-shrink-0 me-3">
                                     <img src="http://127.0.0.1:8000/assets/img/icons/unicons/wallet.png" alt="User">
                                 </div> --}}
@@ -390,7 +390,7 @@
                                         </small>
                                     </div>
                                 </div> --}}
-                            </div>
+                            {{-- </div> --}}
                             <div id="kriteriaChart" style="min-height: 215px;">
 
                             </div>
@@ -423,7 +423,7 @@
                 <div class="card-body">
                     <ul class="p-0 m-0">
 
-                        @forelse ($data['mahasiswas'] as $nama => $skor)
+                        @forelse ($data['mahasiswas'] as $mahasiswa)
                             <li class="d-flex mb-4 pb-1">
                                 <div class=" flex-shrink-0 badge badge-center rounded-pill bg-label-success">
                                     <i class='bx bx-user'></i>
@@ -431,11 +431,11 @@
 
                                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                     <div class="me-2 mx-2">
-                                        <h6 class="mb-0">{{ $nama ?? '' }}</h6>
+                                        <h6 class="mb-0">{{ $mahasiswa['nama'] ?? '' }}</h6>
                                         {{-- <small class="text-muted d-block mb-1">Paypal</small> --}}
                                     </div>
                                     <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">{{ $skor ?? '' }}</h6>
+                                        <h6 class="mb-0">{{ $mahasiswa['skor'] ?? '' }}</h6>
                                     </div>
                                 </div>
                             </li>
@@ -547,7 +547,7 @@
                                     show: true
                                 },
                                 min: 0,
-                                max: 5,
+                                max: 10,
                                 tickAmount: 5
                             }
                         };
