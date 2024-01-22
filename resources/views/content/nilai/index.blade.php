@@ -66,12 +66,19 @@
                         <th class="sorting sorting_asc" tabindex="0" aria-controls="tabelNilai" aria-sort="ascending"
                             aria-label="No: activate to sort column descending" style="width: 0px;">No
                         </th>
+
                         <th class="sorting" tabindex="0" aria-controls="tabelNilai" colspan="1"
                             aria-label="Nama: activate to sort column ascending" style="width: 132px;">Nama</th>
                         <th class="sorting" tabindex="0" aria-controls="tabelNilai" colspan="1"
                             aria-label="NIM: activate to sort column ascending" style="width: 132px;">NIM</th>
-                        <th class="sorting" tabindex="0" aria-controls="tabelNilai" colspan="1"
-                            aria-label="IPK: activate to sort column ascending" style="width: 55px;">IPK</th>
+
+                        @foreach ($data[1]['nilai'] as $nilaiItem)
+                            <th class="sorting" tabindex="0" aria-controls="tabelNilai" colspan="1"
+                                aria-label="{{ $nilaiItem['kriteria'] }}: activate to sort column ascending"
+                                style="width: 55px;">
+                                {{ $nilaiItem['kriteria'] }}</th>
+                        @endforeach
+                        {{-- 
                         <th class="sorting" tabindex="0" aria-controls="tabelNilai" colspan="1"
                             aria-label="SSKM: activate to sort column ascending" style="width: 55px;">SSKM
                         </th>
@@ -79,24 +86,28 @@
                             aria-label="Karya Tulis: activate to sort column ascending" style="width: 55px;">Karya Tulis
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="tabelNilai" colspan="1"
-                            aria-label="TOEFL: activate to sort column ascending" style="width: 55px;">TOEFL</th>
+                            aria-label="TOEFL: activate to sort column ascending" style="width: 55px;">TOEFL</th> --}}
                         <th class="sorting" tabindex="0" aria-controls="tabelNilai" colspan="1"
                             aria-label="Action: activate to sort column ascending" style="width: 55px;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($data as $key => $nilai)
+                    @forelse ($data as $key => $nilais)
+                        {{-- {{ dd($nilais['mahasiswa_data']['nama']) }} --}}
                         <tr>
-                            <td>{{ ++$key }}</td>
-                            <td>{{ $nilai->mahasiswa->nama ?? '' }}</td>
-                            <td>{{ $nilai->mahasiswa->nim ?? '' }}</td>
-                            <td>{{ $nilai->IPK ?? 0 }}</td>
-                            <td>{{ $nilai->SSKM ?? 0 }}</td>
-                            <td>{{ $nilai->karya_tulis ?? 0 }}</td>
-                            <td>{{ $nilai->TOEFL ?? 0 }}</td>
+                            <td>{{ $key }}</td>
+
+                            <td>{{ $nilais['mahasiswa_data']['nama'] ?? '' }}</td>
+                            <td>{{ $nilais['mahasiswa_data']['nim'] ?? '' }}</td>
+
+                            @foreach ($nilais['nilai'] as $nilaiItem)
+                                <td>{{ $nilaiItem['nilai'] ?? 0 }}</td>
+                            @endforeach
+
+                            {{-- {{ dd($nilais['mahasiswa_id']) }} --}}
                             <td>
                                 <div class="inline">
-                                    <span data-id="{{ $nilai->mahasiswa_id }}" class="text-success btnEdit"
+                                    <span data-id="{{ $nilais['mahasiswa_id'] ?? 0 }}" class="text-success btnEdit"
                                         data-bs-toggle="modal" data-bs-target="#modalEditNilai"><i
                                             class="bx bx-edit-alt bx-sm me-2"></i>
                                     </span>
@@ -128,8 +139,8 @@
 
                         <div class="row g-2">
                             <div class="col mb-3">
-                                <label for="id_nilai" class="form-label">ID</label>
-                                <input type="text" id="id_nilai" class="form-control" placeholder="0"
+                                <label for="id_mhs" class="form-label">ID</label>
+                                <input type="text" id="id_mhs" class="form-control" placeholder="0"
                                     aria-label="First name" readonly disabled>
                             </div>
                             <div class="col mb-3">
@@ -150,24 +161,32 @@
                         <div class="row g-2">
                             <div class="col mb-3">
                                 <label for="ipk_nilai" class="form-label">IPK</label>
-                                <input type="number" id="ipk_nilai" class="form-control" placeholder="3.50">
+                                <input type="number" id="kriteria_id_ipk" class="form-control" hidden readonly>
+                                <input type="number" id="ipk_nilai" class="form-control" placeholder="3.50" required>
                             </div>
                             <div class="col mb-3">
                                 <label for="sskm_nilai" class="form-label">SSKM</label>
-                                <input type="number" id="sskm_nilai" class="form-control" placeholder="200">
+                                <input type="number" id="kriteria_id_sskm" class="form-control" hidden readonly>
+                                <input type="number" id="sskm_nilai" class="form-control" placeholder="200" required>
                             </div>
                         </div>
 
                         <div class="row g-2">
                             <div class="col mb-3">
                                 <label for="toefl_nilai" class="form-label">TOEFL</label>
-                                <input type="number" id="toefl_nilai" class="form-control" placeholder="500">
+                                <input type="number" id="kriteria_id_toefl" class="form-control" hidden readonly>
+                                <input type="number" id="toefl_nilai" class="form-control" placeholder="500" required>
                             </div>
                             <div class="col mb-3">
                                 <label for="karya_tulis_nilai" class="form-label">Karya Tulis</label>
-                                <input type="number" id="karya_tulis_nilai" class="form-control" placeholder="2">
+                                <input type="number" id="kriteria_id_kt" class="form-control" hidden readonly>
+                                <input type="number" id="karya_tulis_nilai" class="form-control" placeholder="2"
+                                    required>
                             </div>
                         </div>
+
+                        <div id="error-modal"></div>
+
                     </div>
                     <div class="modal-footer">
                         <div class="text-center" id="loading" style="display: none">
@@ -210,19 +229,38 @@
                         method: 'GET',
                         dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
                         success: function(data) {
-                            console.log(data.id);
-                            // Update konten modal dengan data yang diterima
-                            $('#id_nilai').val(data[0].id);
+                            console.log(data);
+
+
+                            // console.log(mahasiswas)
+                            nilai = [];
+                            for (let i = 0; i < data.length; i++) {
+                                // console.log(data[i].nilai)
+                                nilai.push(data[i].nilai);
+                            }
+
+                            // console.log(nilai)
+                            $('#id_mhs').val(data[0].mahasiswa_id);
                             $('#nim_nilai').val(data[0].nim);
                             $('#nama_nilai').val(data[0].nama);
-                            $('#ipk_nilai').val(data[0].IPK);
-                            $('#sskm_nilai').val(data[0].SSKM);
-                            $('#toefl_nilai').val(data[0].TOEFL);
-                            if (data[0].karya_tulis == null || data[0].karya_tulis == 0) {
+                            $('#ipk_nilai').val(nilai[0]);
+                            $('#sskm_nilai').val(nilai[1]);
+                            $('#toefl_nilai').val(nilai[2]);
+                            if (nilai[3] == null || nilai[3] == 0) {
                                 $('#karya_tulis_nilai').val(0);
                             } else {
-                                $('#karya_tulis_nilai').val(data[0].karya_tulis);
+                                $('#karya_tulis_nilai').val(nilai[3]);
                             }
+
+
+                            //kriteria id
+                            $('#kriteria_id_ipk').val(data[0].kriteria_id);
+                            $('#kriteria_id_sskm').val(data[1].kriteria_id);
+                            $('#kriteria_id_toefl').val(data[2].kriteria_id);
+                            $('#kriteria_id_kt').val(data[3].kriteria_id);
+
+
+
                             // Tampilkan modal
                             $('#modalEditNilai').modal('show');
                         },
@@ -237,10 +275,10 @@
                     // JavaScript
                     $("#loading").css("display", "block");
                     $("#btnModalEditNilai").attr("disabled", true);
-                    $("#btnModalEditNilai").remove();
-                    $("#btnModalClose").remove();
+                    $("#btnModalEditNilai").hide();
+                    $("#btnModalClose").hide();
 
-                    nilaiId = $('#id_nilai').val();
+                    const mahasiswa_id = $('#id_mhs').val();
 
                     $.ajax({
                         type: 'POST',
@@ -249,15 +287,29 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 
                         },
-                        url: `/admin/nilai/update-nilai/${nilaiId}`,
+                        url: `/admin/nilai/update-nilai/${mahasiswa_id}`,
                         data: {
                             '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
+                            'mahasiswa_id': mahasiswa_id,
                             'nim': $('#nim_nilai').val(),
                             'nama': $('#nama_nilai').val(),
-                            'ipk': $('#ipk_nilai').val(),
-                            'sskm': $('#sskm_nilai').val(),
-                            'toefl': $('#toefl_nilai').val(),
-                            'karya_tulis': $('#karya_tulis_nilai').val(),
+                            'nilai': [{
+                                    'kriteria_id': $('#kriteria_id_ipk').val(),
+                                    'nilai': $('#ipk_nilai').val(),
+                                },
+                                {
+                                    'kriteria_id': $('#kriteria_id_sskm').val(),
+                                    'nilai': $('#sskm_nilai').val(),
+                                },
+                                {
+                                    'kriteria_id': $('#kriteria_id_toefl').val(),
+                                    'nilai': $('#toefl_nilai').val(),
+                                },
+                                {
+                                    'kriteria_id': $('#kriteria_id_kt').val(),
+                                    'nilai': $('#karya_tulis_nilai').val(),
+                                },
+                            ]
                             // Tambahkan data lain sesuai kebutuhan
                         },
                         success: function(response) {
@@ -284,7 +336,20 @@
                         },
                         error: function(error) {
                             // Tanggapi error
-                            console.error(error);
+                            const msg = `<div class="alert alert-danger alert-dismissible" role="alert">
+                                ${"Gagal update..."}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>`;
+
+                            $('#error-modal').html(msg);
+
+                            // ("#loading").css("display", none);
+                            // $("#btnModalEditNilai").attr("disabled", true);
+                            // $("#btnModalEditNilai").hide();
+                            // $("#btnModalClose").hide();
+
+                            // console.log(error);
                             // Lakukan tindakan lainnya jika diperlukan
                         }
                     });
