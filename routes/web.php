@@ -103,11 +103,22 @@ Route::group(['prefix' => 'admin', 'as' => '', 'middleware' => 'auth'], function
   Route::get('/nilai/get-nilai/{id}', [NilaiController::class, 'getNilaiByMhsId']);
   
   
-  // update mahasiswa by id
+  // update nilai by id
   Route::post('/nilai/update-nilai/{id}', [NilaiController::class, 'updateNilai']);
   
   // nilai karya tulis
   Route::get('/nilais/nilai-karya-tulis', [KaryaTulisController::class, 'nilai_karya_tulis'])->name('nilais-nilai-karya-tulis');
+  // get nilai karya tulis by id
+  Route::get('/nilai/get-nilai-karya-tulis/{id}', [KaryaTulisController::class, 'getNilaiKaryaTulisById']);
+
+  // update 
+  // update nilai karya tulis by id
+  Route::post('/nilai/update-nilai-karya-tulis/{id}', [KaryaTulisController::class, 'updateNilaiKaryaTulis']);
+
+  
+  // hapus kt by id
+  Route::post('/nilai/nilai-karya-tulis/delete/{id}', [KaryaTulisController::class, 'destroy']);
+
 
   // Route for Peringkat
   // Route::get('/peringkat', [RankingController::class, 'prosesHitung'])->name('peringkat');
@@ -118,23 +129,31 @@ Route::group(['prefix' => 'admin', 'as' => '', 'middleware' => 'auth'], function
 
   // Route for Kriteria
   Route::get('/kriterias/kriteria', [KriteriaController::class, 'index'])->name('kriterias-kriteria');
+
+  // tambah kriteria
+  Route::post('/kriteria/tambah-kriteria', [KriteriaController::class, 'tambahKriteria'])->name('kriterias.tambah');
+
+  // hapus kriteria
+  Route::post('/kriteria/delete/{id}', [KriteriaController::class, 'destroy']);
   
   // get kriteria by id
   Route::get('/kriteria/get-kriteria/{id}', [KriteriaController::class, 'getKriteriaById']);
   
-  // update mahasiswa by id
+  // update kriteria by id
   Route::post('/kriteria/update-kriteria/{id}', [KriteriaController::class, 'updateKriteria']);
   
 
   // klasifikasi karya tulis
   Route::get('/kriterias/klasifikasi-karya-tulis', [KlasifikasiKaryaTulisController::class, 'klasifikasi_karya_tulis'])->name('kriterias-klasifikasi-karya-tulis');
-
-
+  // get klasifikasi by id
+  Route::get('/kriterias/get-klasifikasi/{id}', [KlasifikasiKaryaTulisController::class, 'getKlasifikasiById']);
+  // update klasfikasi by id
+  Route::post('/kriterias/update-klasifikasi/{id}', [KlasifikasiKaryaTulisController::class, 'updateKlasifikasi']);
 
   // Route for Ranking
   Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');
 
-  Route::get('/ranking/hitung', [RankingController::class, 'prosesHitung'])->name('ranking.hitung');
+  Route::get('/ranking/hitung/{periode}', [RankingController::class, 'prosesHitung']);
 
 
   //  Route for Peringkat
