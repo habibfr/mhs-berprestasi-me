@@ -67,10 +67,14 @@
                             {{-- {{ dd($nilais['mahasiswa_id']) }} --}}
                             <td>
                                 <div class="inline">
-                                    <span data-id="{{ $nilais['mahasiswa_id'] ?? 0 }}" class="text-success btnEdit"
-                                        data-bs-toggle="modal" data-bs-target="#modalEditNilai"><i
+                                    <span data-id="{{ $nilais_kt->id ?? 0 }}" class="text-success btnEdit"
+                                        data-bs-toggle="modal" data-bs-target="#modalEditKaryaTulis"><i
                                             class="bx bx-edit-alt bx-sm me-2"></i>
                                     </span>
+                                    {{-- <span data-id="{{ $nilais_kt->id ?? 0 }}" class="text-danger btnHapus"
+                                        data-bs-toggle="modal" data-bs-target="#modalHapusKT"><i
+                                            class="bx bx-trash bx-sm me-2"></i>
+                                    </span> --}}
                                 </div>
                             </td>
                         </tr>
@@ -85,60 +89,63 @@
     {{-- End Tabel Kriteria --}}
 
     {{-- modal edit --}}
-    <div class="modal fade" id="modalEditNilai" data-bs-backdrop="static" tabindex="-1" style="display: none;"
+    <div class="modal fade" id="modalEditKaryaTulis" data-bs-backdrop="static" tabindex="-1" style="display: none;"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form action="">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="labelEditNilai">Edit Data Nilai</h5>
+                        <h5 class="modal-title" id="labelEditKaryaTulis">Edit Data Karya Tulis</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
 
                         <div class="row g-2">
                             <div class="col mb-3">
-                                <label for="id_nilai" class="form-label">ID</label>
-                                <input type="text" id="id_nilai" class="form-control" placeholder="0"
+                                <label for="id_nilai_kt" class="form-label">ID</label>
+                                <input type="number" id="id_nilai_kt" class="form-control" placeholder="1"
+                                    aria-label="First name" readonly disabled>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nama_mhs_kt" class="form-label">Nama Mahasiswa</label>
+                                <input type="text" id="nama_mhs_kt" class="form-control" placeholder="Budi" required
+                                    readonly disabled>
+                            </div>
+                        </div>
+
+                        <div class="col mb-3">
+                            <label for="kriteria_nilai_kt" class="form-label">Kriteria</label>
+                            <input type="text" id="kriteria_nilai_kt" class="form-control" placeholder="Karya Tulis"
+                                aria-label="Last name" required disabled readonly>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col mb-3">
+                                <label for="periode_nilai_kt" class="form-label">Periode</label>
+                                <input type="number" id="periode_nilai_kt" class="form-control" placeholder="2023"
                                     aria-label="First name" readonly disabled>
                             </div>
                             <div class="col mb-3">
-                                <label for="nim_nilai" class="form-label">NIM</label>
-                                <input type="text" id="nim_nilai" class="form-control" placeholder="21410100050"
-                                    aria-label="Last name" required disabled readonly>
+                                <label for="klasifikasi_nilai_kt" class="form-label">Klasifikasi</label>
+                                <input type="text" id="klasifikasi_nilai_kt" class="form-control"
+                                    placeholder="Tidak Punya" aria-label="Last name" required disabled readonly>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col mb-3">
-                                <label for="nama_nilai" class="form-label">Name</label>
-                                <input type="text" id="nama_nilai" class="form-control" placeholder="Enter Name"
-                                    required disabled readonly>
+                                <label for="jumlah_nilai_kt" class="form-label">Jumlah</label>
+                                <input type="number" step="1" id="jumlah_nilai_kt" class="form-control"
+                                    placeholder="1" required max="10" min="0">
                             </div>
                         </div>
 
-                        <div class="row g-2">
-                            <div class="col mb-3">
-                                <label for="ipk_nilai" class="form-label">IPK</label>
-                                <input type="number" id="ipk_nilai" class="form-control" placeholder="3.50">
-                            </div>
-                            <div class="col mb-3">
-                                <label for="sskm_nilai" class="form-label">SSKM</label>
-                                <input type="number" id="sskm_nilai" class="form-control" placeholder="200">
-                            </div>
-                        </div>
 
-                        <div class="row g-2">
-                            <div class="col mb-3">
-                                <label for="toefl_nilai" class="form-label">TOEFL</label>
-                                <input type="number" id="toefl_nilai" class="form-control" placeholder="500">
-                            </div>
-                            <div class="col mb-3">
-                                <label for="karya_tulis_nilai" class="form-label">Karya Tulis</label>
-                                <input type="number" id="karya_tulis_nilai" class="form-control" placeholder="2">
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="text-center" id="loading" style="display: none">
@@ -151,11 +158,31 @@
                         </div>
                         <button type="button" class="btn btn-outline-secondary" id="btnModalClose"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success" id="btnModalEditNilai">Save changes</button>
+                        <button type="button" class="btn btn-success" id="btnmodalEditKaryaTulis">Save changes</button>
                     </div>
                 </div>
             </form>
 
+        </div>
+    </div>
+
+    {{-- modal confirm delete --}}
+    <div class="modal fade" id="modalHapusKT" data-bs-backdrop="static" tabindex="-1" style="display: none;"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="backDropModalTitle">Hapus Mahasiswa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to delete this??</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="confirmHapus" class="btn btn-danger">Iya</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -168,6 +195,142 @@
                     lengthMenu: [3, 5, 10, 20],
                     pagingType: 'full_numbers',
                 });
+            });
+
+
+            // Ketika tombol edit diklik
+            $('.btnEdit').click(function() {
+                // Ambil data-id dari tombol edit mahasiswa
+                var karyaTulisId = $(this).data('id');
+                // console.log(karyaTulisId);
+
+                // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
+                $.ajax({
+                    url: '/admin/nilai/get-nilai-karya-tulis/' + karyaTulisId,
+                    method: 'GET',
+                    dataType: 'json', // Tentukan bahwa kita mengharapkan respons JSON
+                    success: function(data) {
+                        // console.log(data[0].id);
+                        // Update konten modal dengan data yang diterima
+
+                        if (data[0].klasifikasi == "Tidak Punya") {
+                            $('#jumlah_nilai_kt').attr('disabled', true);
+                        } else {
+                            $('#jumlah_nilai_kt').attr('disabled', false);
+                        }
+
+                        $('#id_nilai_kt').val(data[0].id);
+                        $('#nama_mhs_kt').val(data[0].nama);
+                        $('#kriteria_nilai_kt').val(data[0].kriteria);
+                        $('#periode_nilai_kt').val(data[0].periode);
+                        $('#klasifikasi_nilai_kt').val(data[0].klasifikasi);
+                        $('#jumlah_nilai_kt').val(data[0].jumlah);
+                    },
+                    error: function() {
+                        console.log('Gagal mengambil data mahasiswa.');
+                    }
+                });
+            });
+
+
+            $('#btnmodalEditKaryaTulis').click(function() {
+                // JavaScript
+                $("btnmodalEditKaryaTulis").attr("disabled", true);
+                karyaTulisId = $('#id_nilai_kt').val();
+
+                $.ajax({
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: `/admin/nilai/update-nilai-karya-tulis/${karyaTulisId}`,
+                    data: {
+                        '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
+                        'jumlah': $('#jumlah_nilai_kt').val(),
+                    },
+                    success: function(response) {
+                        // $('#modalEditMhs').modal('hide');
+                        $("#btnmodalEditKaryaTulis").hide();
+
+                        // Tanggapi success
+                        var alert = `
+                                <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+                                    <div class="toast-header">
+                                        <i class="bx bx-bell me-2"></i>
+                                        <div class="me-auto fw-medium">Briliant</div>
+                                        <small>1 seconds ago</small>
+                                    </div>
+                                    <div class="toast-body">
+                                        ${response.message}
+                                    </div>
+                                </div>
+                            `;
+
+                        $('#your-alert-container').html(alert);
+
+                        setTimeout(function() {
+                            window.location.reload()
+                        }, 1500);
+                    },
+                    error: function(error) {
+                        // Tanggapi error
+                        console.error(error.message);
+                        // Lakukan tindakan lainnya jika diperlukan
+                    }
+                });
+            });
+
+            $('.btnHapus').click(function() {
+                // Ambil data-id dari tombol edit mahasiswa
+                let ktId = $(this).data('id');
+                console.log(ktId);
+
+                // Lakukan permintaan Ajax untuk mendapatkan data mahasiswa berdasarkan ID
+                $('#confirmHapus').click(function() {
+                    $.ajax({
+                        url: '/admin/nilai/nilai-karya-tulis/delete/' + ktId,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'post',
+                        dataType: 'json',
+                        success: function(data) {
+                            console.log(data)
+                            // Handle success, maybe update UI or show a message
+                            // $('#modalHapus').modal('hide');
+
+                            var alert = `
+                                            <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+                                                <div class="toast-header">
+                                                    <i class="bx bx-bell me-2"></i>
+                                                    <div class="me-auto fw-medium">Briliant</div>
+                                                    <small>1 seconds ago</small>
+                                                </div>
+                                                <div class="toast-body">
+                                                    ${data.message}
+                                                </div>
+                                            </div>
+                                        `;
+
+                            $('#your-alert-container').html(alert);
+                            $("#confirmHapus").hide();
+                            $("#confirmHapus").attr("disabled", true);
+
+                            setTimeout(function() {
+                                window.location.reload()
+                            }, 1500);
+
+                            // console.log(data.message);
+
+                        },
+                        error: function(error) {
+                            console.log(error.message);
+                            // Handle errors, maybe show an error message
+                            console.error('Error deleting mahasiswa:', error
+                                .responseJSON);
+                        }
+                    });
+                })
             });
         </script>
     @endpush
