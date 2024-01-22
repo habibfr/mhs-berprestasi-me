@@ -14,22 +14,47 @@ class RankingController extends Controller
 {
     public function index(){
 
+        // $data = [];
         $data = Ranking::orderBy('skor', 'desc')->get();
-        
-        $kt = KaryaTulis::all();
-        $klas = KlasifikasiKaryaTulis::all();
-        
-        $datas = $this->hitungNilaiAkhir($kt, $klas);
 
-        // dd($datas);
-        return view("content.ranking.index", compact('data'));
+        // dd($data_ranking);  
+        $kriteria = Kriteria::all();
+  
+        $data_kriteria_array = $kriteria->toArray(); // Ubah ke Array
+
+        $periode = array_column($data_kriteria_array, 'periode');
+
+        $periodes = array_unique($periode);
+
+        // // Ubah key menjadi data_ranking
+        // $data['data_ranking'] = array_column($data_ranking, null, 'data_ranking');
+
+        // // Ubah key menjadi periode  
+        // $data['periode'] = array_column($unique_periodes, null, 'periode');
+
+        // array_push($data, $data_ranking);
+        // array_push($data, $unique_periodes);
+        // $kt = KaryaTulis::all();
+        // $klas = KlasifikasiKaryaTulis::all();
+        
+        // $this->hitungNilaiAkhir($kt, $klas);
+
+        
+
+        // dd($data);
+        return view("content.ranking.index", compact('data', 'periodes'));
     }
 
 
 
     function hitungSAW($data_mahasiswa, $data_kriteria, $data_nilai) {
-
         // normalisasi matriks keputusan
+
+        $kt = KaryaTulis::all();
+        $klas = KlasifikasiKaryaTulis::all();
+        
+        $this->hitungNilaiAkhir($kt, $klas);
+
         $matriks_keputusan = [];
         foreach ($data_nilai as $nilai) {
             $kriteria = $this->cariKriteria($nilai['kriteria_id'], $data_kriteria);
@@ -132,13 +157,18 @@ class RankingController extends Controller
         return $min;
     }
 
-    public function prosesHitung(){
+    public function prosesHitung($periode){
         // Mengambil Data Mahasiswa/alternatif
+
+        
+
+
+
         $data_alternatif = array();
         $mahasiswas = Mahasiswa::all();
 
         $data_kriteria = array();
-        $kriterias = Kriteria::where('periode', 2021)->get();
+        $kriterias = Kriteria::where('periode', $periode)->get();
 
         $data_nilai = array();
         $nilais = Nilai::all();
@@ -146,8 +176,10 @@ class RankingController extends Controller
         // dd($kriterias);
 
         $this->hitungSAW($mahasiswas, $kriterias, $nilais);
+        return response()->json(['message' => 'Data ranking berhasil diperbarui']);
+ 
 
-        return back()->withSuccess('Great! Perhitungan berhasil.');
+        // return back()->withSuccess('Great! Perhitungan berhasil.');
     }
 
     
@@ -176,7 +208,6 @@ class RankingController extends Controller
             $nilai_akhir = $nilai['jumlah'] * $klasifikasi['nilai'];
             // dd($nilai_akhir);
             
-
             
             $key = $nilai['mahasiswa_id'] . '_' . $nilai['kriteria_id'];
             
@@ -189,6 +220,8 @@ class RankingController extends Controller
         
         $collection_nilai_mahasiswa_baru = [];
         
+        // dd($nilai_mahasiswa);
+        
         foreach ($nilai_mahasiswa as $key => $nilai) {
             [$mahasiswa_id, $kriteria_id] = explode('_', $key);
             
@@ -200,6 +233,8 @@ class RankingController extends Controller
                 $mhs_nilai = Nilai::firstOrNew([
                     'mahasiswa_id' => $mahasiswa_id, 
                     'kriteria_id' => $kriteria_id]);
+
+                    // dd($mhs_nilai);
                     
                 $mhs_nilai->nilai = $nilai;
                 $mhs_nilai->save();

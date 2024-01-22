@@ -69,12 +69,9 @@
         <div class="col">
             <div class="float-start mb-3">
                 <div class="input-group-append">
-                    <form action="{{ route('ranking.hitung') }}" method="get">
-                        @csrf
-                        <button class="btn btn-primary square" id="btnProsesHitung" type="submit"><i
-                                class="ft-upload mr-1"></i>
-                            Proses Hitung</button>
-                    </form>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProses">
+                        Small
+                    </button>
                 </div>
             </div>
         </div>
@@ -169,6 +166,54 @@
         </div>
     </div> --}}
 
+    <div class="modal fade hide" id="modalProses" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                {{-- <form action="{{ route('ranking.hitung') }}" method="get">
+                    @csrf --}}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Proses Hitung Dengan SAW</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+
+                    <div class="col mb-3">
+                        <div class="mb-3">
+                            <label for="periodeKriteria" class="form-label">Pilih Periode Kriteria</label>
+                            <select id="periodeKriteria" class="form-select">
+                                <option>Pilih Periode</option>
+
+                                @foreach ($periodes as $periode)
+                                    <option value="{{ $periode }}">{{ $periode }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-center" id="loading" style="display: none">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div>
+                            <small>Sedang melakukan proses hitung...</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary square" id="btnProsesHitung" type="submit"><i
+                            class="ft-upload mr-1"></i>
+                        Proses Hitung</button>
+                </div>
+                {{-- </form> --}}
+            </div>
+        </div>
+    </div>
+
 
 
     @push('pricing-script')
@@ -180,11 +225,101 @@
                     pagingType: 'full_numbers',
                 });
 
-            });
 
-            $('#btnProsesHitung').click(function() {
-                $("#loading").css("display", "block");
-            })
+                // $('#periodeKriteria').datepicker({
+                //     minViewMode: 2,
+                //     autoclose: true,
+                //     startDate: "2015",
+                //     endDate: "2022",
+                //     format: 'yyyy'
+                // });
+
+                $('#btnProsesHitung').click(function() {
+                    // JavaScript
+                    // $("#btnProsesHitung").attr("disabled", true);
+                    let periode = $('#periodeKriteria').val();
+
+                    if (isNaN(periode)) {
+                        // jika periode bukan number
+                        console.log('Periode harus number');
+
+
+                        var alert = `
+                                        <div class="bs-toast toast toast-placement-ex m-2 fade bg-danger top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+                                            <div class="toast-header">
+                                                <i class="bx bx-bell me-2"></i>
+                                                <div class="me-auto fw-medium">Briliant</div>
+                                                <small>1 seconds ago</small>
+                                            </div>
+                                            <div class="toast-body">
+                                                ${"Pilih periode kriteria dulu!!"}
+                                            </div>
+                                        </div>
+                                    `;
+
+                        $('#your-alert-container').html(alert);
+                        return false;
+                    } else {
+                        // $('#btnProsesHitung').click(function() {
+                        $("#loading").css("display", "block");
+                        // })
+
+                        $('#modalProses').modal('hide');
+
+                        $.ajax({
+                            type: 'get',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: `/admin/ranking/hitung/${periode}`,
+                            data: {
+                                '_token': '{{ csrf_token() }}', // Pastikan mengirim token CSRF
+                                // 'nim': $('#nim_mhs').val(),
+                            },
+                            success: function(response) {
+                                // console.log(response.message)
+                                // $('#modalEditMhs').modal('hide');
+                                // $("#btnProsesHitung").hide();
+
+                                // Tanggapi success
+                                setTimeout(function() {
+                                    var alert = `
+                                        <div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+                                            <div class="toast-header">
+                                                <i class="bx bx-bell me-2"></i>
+                                                <div class="me-auto fw-medium">Briliant</div>
+                                                <small>1 seconds ago</small>
+                                            </div>
+                                            <div class="toast-body">
+                                                ${response.message}
+                                            </div>
+                                        </div>
+                                    `;
+
+                                    $('#your-alert-container').html(alert);
+                                }, 1000);
+
+
+                                setTimeout(function() {
+                                    window.location.reload()
+                                }, 2000);
+                            },
+                            error: function(error) {
+                                // Tanggapi error
+                                console.error(error.message);
+                                // Lakukan tindakan lainnya jika diperlukan
+                            }
+                        });
+                    }
+                    // console.log(periode)
+                    // if (periode == "Pilih Periode") {
+                    //     console.log('periode kosong')
+                    // }
+
+
+                });
+
+            });
         </script>
     @endpush
 
