@@ -18,9 +18,16 @@ class UserSeeder extends Seeder
     {
 
         $dataUser = [
-            'name' => Str::random(10),
-            'email' => Str::random(10).'@gmail.com',
-            'password' => Hash::make('password123'),  
+            [ 
+                'name' => 'Habib Fatkhul Rohman',
+                'email' => 'habib@gmail.com',
+                'password' => Hash::make('password123')
+            ],
+            [
+                'name' => 'Administrator',
+                'email' => 'admin@admin.com',
+                'password' => Hash::make('admin123')
+            ]
         ];
 
         // DB::table('users')->insert([

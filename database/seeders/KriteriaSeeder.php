@@ -18,6 +18,7 @@ class KriteriaSeeder extends Seeder
                 'kriteria' => 'IPK',
                 'atribut' => 'benefit',
                 'bobot'=> 0.3,
+                'periode' => 2023,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -25,6 +26,7 @@ class KriteriaSeeder extends Seeder
                 'kriteria' => 'SSKM',
                 'atribut' => 'benefit',
                 'bobot'=> 0.25,
+                'periode'=> 2023,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -32,6 +34,7 @@ class KriteriaSeeder extends Seeder
                 'kriteria' => 'TOEFL',
                 'atribut' => 'benefit',
                 'bobot'=> 0.2,
+                'periode' => 2023,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -39,10 +42,10 @@ class KriteriaSeeder extends Seeder
                 'kriteria' => 'Karya Tulis',
                 'atribut' => 'benefit',
                 'bobot'=> 0.25,
+                'periode' => 2023,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            
         ];
 
         // Insert data dummy ke dalam tabel 'mahasiswa'

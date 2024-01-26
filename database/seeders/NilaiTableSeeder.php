@@ -17,28 +17,86 @@ class NilaiTableSeeder extends Seeder
         $nilaiData = [
             [
                 'mahasiswa_id' => 1, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
-                'IPK' => 3.25,
-                'SSKM' => 250,
-                'TOEFL' => 550,
-                'karya_tulis' => 2,
+                'kriteria_id' => 1,
+                'nilai' => 3.50,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'mahasiswa_id' => 2, // Sesuaikan dengan ID mahasiswa lainnya
-                'IPK' => 3.50,
-                'SSKM' => 200,
-                'TOEFL' => 600,
-                'karya_tulis' => 1,
+                'mahasiswa_id' => 1, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 2,
+                'nilai' => 200,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'mahasiswa_id' => 3, // Sesuaikan dengan ID mahasiswa lainnya
-                'IPK' => 3.90,
-                'SSKM' => 150,
-                'TOEFL' => 500,
-                'karya_tulis' => 3,
+                'mahasiswa_id' => 1, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 3,
+                'nilai' => 500,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 1, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 4,
+                'nilai' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'mahasiswa_id' => 2, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 1,
+                'nilai' => 3.30,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 2, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 2,
+                'nilai' => 250,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 2, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 3,
+                'nilai' => 450,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 2, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 4,
+                'nilai' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 3, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 1,
+                'nilai' => 3.80,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 3, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 2,
+                'nilai' => 190,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 3, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 3,
+                'nilai' => 550,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'mahasiswa_id' => 3, // Sesuaikan dengan ID mahasiswa dari seeder MahasiswaSeeder
+                'kriteria_id' => 4,
+                'nilai' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
