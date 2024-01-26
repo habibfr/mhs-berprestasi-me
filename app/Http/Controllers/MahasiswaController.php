@@ -245,7 +245,7 @@ class MahasiswaController extends Controller
     public function destroy($id)
     {
         $mahasiswa = Mahasiswa::find($id);
-        $nilai = Nilai::where('mahasiswa_id', $id)->first();
+        $nilai = Nilai::where('mahasiswa_id', $id)->get();
 
 
         if ($mahasiswa) {

@@ -46,7 +46,7 @@ class KriteriaController extends Controller
         $request->validate([
             'kriteria' => 'required|string|max:50',
             'atribut' => 'required|string|max:50',
-            'bobot' => 'required|integer',
+            'bobot' => 'required|numeric',
             'periode' => 'required|integer',
         ]);
 
