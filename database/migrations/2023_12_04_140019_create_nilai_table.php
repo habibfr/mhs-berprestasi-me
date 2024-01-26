@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('nilais', function (Blueprint $table) {
             $table->id();
             $table->foreignId("mahasiswa_id")->nullable()->index("fk_nilai_to_mahasiswa");
-            $table->double('IPK')->nullable();
-            $table->integer('SSKM')->nullable();
-            $table->integer('TOEFL')->nullable();
-            $table->integer('karya_tulis')->nullable();
+            $table->foreignId("kriteria_id")->nullable()->index("fk_nilai_to_kriteria");
+            $table->double('nilai')->nullable();
+
+            
             $table->timestamps();
         });
     }
